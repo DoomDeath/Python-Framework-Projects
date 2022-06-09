@@ -7,9 +7,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
+  mensaje: boolean = false;
+
+
   constructor() { }
 
   ngOnInit(): void {
+
   }
+
+  recibirMensaje(msj: boolean) {
+    this.mensaje = msj;
+
+
+  }
+
+
 
 }

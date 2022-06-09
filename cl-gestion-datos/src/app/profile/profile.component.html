@@ -1,10 +1,14 @@
 <div>
   <div class="fixed">
   <div>
+    <p>{{mensaje}}</p>
     <app-description></app-description>
   </div>
   <div>
-    <app-climate></app-climate>
+    <app-climate (mensaje)="recibirMensaje( $event )"></app-climate>
+  </div>
+  <div>
+    <button [disabled]="mensaje">Wea Wea Wea</button>
   </div>
   </div>
   <div>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+
 
 @Component({
   selector: 'app-climate',
@@ -7,9 +8,36 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClimateComponent implements OnInit {
 
-  constructor() { }
+  @Output()
+  mensaje: EventEmitter<boolean>;
+
+
+  validacion: boolean = false;
+  
+
+
+
+  constructor() {
+    this.mensaje = new EventEmitter();
+   
+  }
 
   ngOnInit(): void {
+  }
+
+  cambiarTrue() {
+    this.validacion = true;
+    this.enviarPapi();
+
+  }
+  cambiarFalse() {
+    this.validacion = false;
+    this.enviarPapi();
+
+  }
+
+  enviarPapi() {
+    this.mensaje.emit(this.validacion);
   }
 
 }
