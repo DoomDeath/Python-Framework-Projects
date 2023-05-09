@@ -7,6 +7,8 @@ import cl.pruebatecnica.entity.User;
 import cl.pruebatecnica.repository.PhoneRepository;
 import cl.pruebatecnica.repository.UserRepository;
 import cl.pruebatecnica.service.RegisterService;
+import cl.pruebatecnica.utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/prueba")
+@Slf4j
 public class PruebaController {
 
     @Autowired
@@ -46,6 +49,19 @@ public class PruebaController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createUser(@RequestBody UserRequest user) {
+        if(!Utils.validarCorreo(user.getEmail())){
+            MessageResponse error = new MessageResponse();
+            error.setCode(409);
+            error.setMessage("correo invalido.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+
+        }
+        if(!Utils.validarPassword(user.getPassword())){
+            MessageResponse error = new MessageResponse();
+            error.setCode(409);
+            error.setMessage("Contraseña invalida.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }
         Optional<UserResponse> optionalUser = Optional.ofNullable(registerService.createUser(user));
         if (optionalUser.isPresent()) {
             UserResponse created = optionalUser.get();
@@ -54,11 +70,15 @@ public class PruebaController {
             registerResponse.setCreated(created.getCreated());
             registerResponse.setModified(created.getModified());
             registerResponse.setToken(created.getToken());
+            log.info(registerResponse + "Se a creado usuario");
             return ResponseEntity.status(HttpStatus.CREATED).body(registerResponse);
+
+
         } else {
             MessageResponse error = new MessageResponse();
             error.setCode(409);
             error.setMessage("El usuario ya existe en el sistema.");
+            log.info(error.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
         }
     }
@@ -67,6 +87,22 @@ public class PruebaController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserRequest userRequest) {
+
+        if(!Utils.validarCorreo(userRequest.getEmail())){
+            MessageResponse error = new MessageResponse();
+            error.setCode(409);
+            error.setMessage("correo invalido.");
+            log.info(error.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+
+        }
+        if(!Utils.validarPassword(userRequest.getPassword())){
+            MessageResponse error = new MessageResponse();
+            error.setCode(409);
+            error.setMessage("Contraseña invalida.");
+            log.info(error.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        }
         UserResponse updatedUser = registerService.updateUser(userRequest);
         if (updatedUser != null) {
             RegisterResponse registerResponse = new RegisterResponse();
@@ -79,6 +115,7 @@ public class PruebaController {
             MessageResponse error = new MessageResponse();
             error.setCode(404);
             error.setMessage("El usuario no existe");
+            log.info(error.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
     }
@@ -91,11 +128,13 @@ public class PruebaController {
             MessageResponse message = new MessageResponse();
             message.setCode(HttpStatus.OK.value());
             message.setMessage("usuario eliminado correctamente.");
+            log.info(message.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(message);
         } else {
             MessageResponse error = new MessageResponse();
             error.setCode(HttpStatus.NOT_FOUND.value());
             error.setMessage("Usuario no encontrado.");
+            log.info(error.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
     }
