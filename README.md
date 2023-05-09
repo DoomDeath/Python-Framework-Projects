@@ -1,2 +1,0 @@
-# Gustavo-Proyectos
-Gestion Datos
