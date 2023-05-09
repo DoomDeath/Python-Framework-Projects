@@ -3,6 +3,7 @@ package cl.pruebatecnica.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "phones")
@@ -13,9 +14,8 @@ public class Phone {
     private Long id;
 
     @Column(nullable = false)
-    private String number;
+    private String number ;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private String email;
 }

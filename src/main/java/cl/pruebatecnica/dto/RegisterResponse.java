@@ -13,10 +13,5 @@ public class RegisterResponse {
     LocalDateTime modified;
     String token;
 
-    public RegisterResponse(Long id, LocalDateTime created, LocalDateTime modified, String token, String name, String email, List<String> phoneNumbers) {
-    }
 
-    public RegisterResponse() {
-
-    }
 }

@@ -10,6 +10,9 @@ import java.util.List;
 
 @Repository
 @EnableJpaRepositories
-public interface PhoneRepository extends JpaRepository<Phone, Long> {
-    List<Phone> findByUser(User user);
+public interface PhoneRepository extends JpaRepository<Phone, Integer> {
+
+    List<Phone> findByEmail(String name);
+
+    List<Phone> findByEmailAndNumberIn(String email, List<String> deletedPhoneNumbers);
 }
