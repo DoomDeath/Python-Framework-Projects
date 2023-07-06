@@ -1,6 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
+import RowClientes from "./RowClientes";
+
 
 const TablaCliente = () => {
+
+  const [clientesList, setClientesList] = useState([
+    {
+      "idCliente": "1",
+      "nombres": "Gustavo",
+      "apellidos": "Burgos",
+      "direccion": "El Parron 80",
+      "telefono": "931833749",
+      "email": "gustavoburgos89@gmail.com"
+    },
+    {
+      "idCliente": "2",
+      "nombres": "Gustavo",
+      "apellidos": "Burgos",
+      "direccion": "El Parron 80",
+      "telefono": "931833749",
+      "email": "gustavoburgos89@gmail.com"
+    },
+    {
+      "idCliente": "3",
+      "nombres": "Gustavo",
+      "apellidos": "Burgos",
+      "direccion": "El Parron 80",
+      "telefono": "931833749",
+      "email": "gustavoburgos89@gmail.com"
+    },
+    {
+      "idCliente": "4",
+      "nombres": "Gustavo",
+      "apellidos": "Burgos",
+      "direccion": "El Parron 80",
+      "telefono": "931833749",
+      "email": "gustavoburgos89@gmail.com"
+    }
+  ])
   return (
     <div className="table-container">
       <table className="table is-striped is-fullwidth">
@@ -15,25 +52,12 @@ const TablaCliente = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <button className="button is-small is-info mr-1" title="Editar">
-                <span className="icon is-small">
-                  <i className="fas fa-edit"></i>
-                </span>
-              </button>
-              <button className="button is-small is-danger" title="Eliminar">
-                <span className="icon is-small">
-                  <i className="fas fa-trash-alt"></i>
-                </span>
-              </button>
-            </td>
-            <td>Gustavo</td>
-            <td>Burgos</td>
-            <td>El Parron 80</td>
-            <td>931833749</td>
-            <td>gustavoburgos89@gmail.com</td>
-          </tr>
+          {
+            clientesList.map(cli => (
+              <RowClientes cliente={cli} key={cli.idCliente} />
+            ))
+          }
+
         </tbody>
       </table>
     </div>
