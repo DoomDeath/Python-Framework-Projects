@@ -2,6 +2,8 @@ import React from "react";
 import Layout from "../components/commons/Layout";
 import TablaCliente from "../components/clientes/TableClientes";
 import ToolbarCliente from "../components/clientes/ToolbarCliente";
+import Modal from "../components/commons/Modal";
+import FormCliente from "../components/clientes/FormCliente";
 
 const Clientes = () => {
   return (
@@ -13,6 +15,9 @@ const Clientes = () => {
           <TablaCliente/>
         </div>
       </div>
+      <Modal>
+        <FormCliente/>
+      </Modal>
     </Layout>
   );
 };
