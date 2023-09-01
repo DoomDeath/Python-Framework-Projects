@@ -4,10 +4,12 @@ import TablaCliente from "../components/clientes/TableClientes";
 import ToolbarCliente from "../components/clientes/ToolbarCliente";
 import Modal from "../components/commons/Modal";
 import FormCliente from "../components/clientes/FormCliente";
+import { ClienteContextProvider } from "../contexts/clienteContext";
 
 const Clientes = () => {
   return (
     <Layout>
+      <ClienteContextProvider >
       <div className="panel">
         <div className="panel-heading">Clientes</div>
         <div className="box">
@@ -18,6 +20,7 @@ const Clientes = () => {
       <Modal>
         <FormCliente/>
       </Modal>
+      </ClienteContextProvider>
     </Layout>
   );
 };

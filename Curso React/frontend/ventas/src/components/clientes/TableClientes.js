@@ -1,43 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect } from "react";
 import RowClientes from "./RowClientes";
-
+import { ClienteContext } from "../../contexts/clienteContext";
 
 const TablaCliente = () => {
 
-  const [clientesList, setClientesList] = useState([
-    {
-      "idCliente": "1",
-      "nombres": "Gustavo",
-      "apellidos": "Burgos",
-      "direccion": "El Parron 80",
-      "telefono": "931833749",
-      "email": "gustavoburgos89@gmail.com"
-    },
-    {
-      "idCliente": "2",
-      "nombres": "Gustavo",
-      "apellidos": "Burgos",
-      "direccion": "El Parron 80",
-      "telefono": "931833749",
-      "email": "gustavoburgos89@gmail.com"
-    },
-    {
-      "idCliente": "3",
-      "nombres": "Gustavo",
-      "apellidos": "Burgos",
-      "direccion": "El Parron 80",
-      "telefono": "931833749",
-      "email": "gustavoburgos89@gmail.com"
-    },
-    {
-      "idCliente": "4",
-      "nombres": "Gustavo",
-      "apellidos": "Burgos",
-      "direccion": "El Parron 80",
-      "telefono": "931833749",
-      "email": "gustavoburgos89@gmail.com"
-    }
-  ])
+  const { clientesList, obtenerClientes } = useContext(ClienteContext);
+
+
+
+  useEffect(() => {
+    obtenerClientes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (clientesList.length === 0) return <center><p>No Existen Clientes</p></center>
   return (
     <div className="table-container">
       <table className="table is-striped is-fullwidth">

@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useContext, useState } from "react";
-import { ModalContext } from "../../contexts/modal/modalContext";
+import { ModalContext } from "../../contexts/modalContext";
+import { ClienteContext } from "../../contexts/clienteContext";
 
 const FormCliente = () => {
   const clienteDefault = {
@@ -11,6 +13,8 @@ const FormCliente = () => {
   };
 
   const { setShowModal } = useContext(ModalContext);
+
+  const { registrarCliente } = useContext(ClienteContext);
 
   const [cliente, setCliente] = useState(clienteDefault);
   const [mensaje, setMensaje] = useState(null);
@@ -25,6 +29,7 @@ const FormCliente = () => {
     limpiarForm();
     cerrarModal();
     console.log(obtenerClienteAEnviar());
+    registrarCliente(obtenerClienteAEnviar());
   };
 
   const limpiarForm = () => {
@@ -47,7 +52,7 @@ const FormCliente = () => {
     let clienteTemp =  {...cliente};
     if(clienteTemp.direccion === "") delete clienteTemp.direccion;
     if(clienteTemp.telefono === "") delete clienteTemp.telefono;
-    return clienteTemp
+    return clienteTemp;
   }
 
   return (

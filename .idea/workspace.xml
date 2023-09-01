@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5cf57974-230c-40ec-ab27-40dfbc059e29" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Curso React/frontend/ventas/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Curso React/frontend/ventas/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/Curso React/frontend/ventas/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/clientes/FormCliente.js" beforeDir="false" afterPath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/clientes/FormCliente.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/clientes/RowClientes.js" beforeDir="false" afterPath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/clientes/RowClientes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/clientes/TableClientes.js" beforeDir="false" afterPath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/clientes/TableClientes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/clientes/ToolbarCliente.js" beforeDir="false" afterPath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/clientes/ToolbarCliente.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/commons/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/commons/Layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/commons/Modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/Curso React/frontend/ventas/src/components/commons/Modal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/src/contexts/modal/modalContext.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Curso React/frontend/ventas/src/pages/Clientes.js" beforeDir="false" afterPath="$PROJECT_DIR$/Curso React/frontend/ventas/src/pages/Clientes.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2Unklv63VJCftZ4Z44KnnlkzbNw" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5cf57974-230c-40ec-ab27-40dfbc059e29" name="Changes" comment="" />
+      <created>1693582894284</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1693582894284</updated>
+    </task>
+    <servers />
+  </component>
+</project>
