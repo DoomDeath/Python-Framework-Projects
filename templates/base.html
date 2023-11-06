@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Título de tu página</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+{% if isLogged %}
+    <header>
+        <nav>
+            {#<ul>
+            {% if not isLogged %}
+                <li><a href="/">Inicio{% if current_page == 'inicio' %} <span>(Actual)</span>{% endif %}</a></li>
+                <li><a href="/acerca">Acerca de{% if current_page == 'acerca' %} <span>(Actual)</span>{% endif %}</a>
+                </li>
+                <li><a href="/contacto">Contacto{% if current_page == 'contacto' %} <span>(Actual)</span>{% endif %}</a>
+                </li>
+            {% endif %}
+        </ul>#}
+            <div style="display: flex; justify-content: space-between;">
+                <span>Bienvenido, {{ user_final["username"] }}</span>
+
+                <div class="dropdown">
+                    <div class="dropdown-content">
+                        <a href="/table_user">Configurar cuenta</a>
+                        <a href="/opcion2">Opción 2</a>
+                        <a href="/opcion3">Opción 3</a>
+                    </div>
+                </div>
+                <form method="post" action="{{ url_for('logout') }}">
+                    <button type="submit">Cerrar Sesión</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+{% else %}
+{% endif %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <p>&copy; {{ fecha_actual }} - Derechos reservados - Gustavo Burgos</p>
+</footer>
+</body>
+</html>

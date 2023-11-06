@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <main>
+        <div class="content-container">
+            <h2>Dashboard</h2>
+            <p>Bienvenido al panel de control. Aquí encontrarás información y opciones para administrar tu cuenta.</p>
+
+            <div class="dashboard-widgets">
+                <!-- Widget 1 -->
+                <div class="widget">
+                    <h3>Estadísticas</h3>
+                    <p>Aquí puedes ver las estadísticas de tu cuenta.</p>
+                    <a href="/estadisticas">Ver estadísticas</a>
+                </div>
+
+                <!-- Widget 2 -->
+                <div class="widget">
+                    <h3>Configuración</h3>
+                    <p>Administra la configuración de tu cuenta.</p>
+                    <a href="/table_user">Configurar cuenta</a>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

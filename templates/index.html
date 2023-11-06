@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <main>
+        <div class="content-container">
+            <h2>Bienvenido a Nuestra Página de Inicio</h2>
+            <p>¡Gracias por visitar nuestro sitio web! Somos una empresa comprometida en brindar soluciones de alta calidad.</p>
+            <p>Explora nuestras páginas para obtener más información sobre nuestros servicios y productos.</p>
+        </div>
+    </main>
+    <main>
+        <div class="content-container">
+            <h2>Iniciar Sesión</h2>
+            <form method="POST" action="/login">
+            <label for="username">Nombre de usuario:</label>
+            <input type="text" id="username" name="username" required><br><br>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <input type="submit" value="Iniciar Sesión">
+            </form>
+            <p>No tienes una cuenta? <a href="/registro">Regístrate</a></p>
+        </div>
+    </main>
+{% endblock %}
