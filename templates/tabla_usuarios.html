@@ -1,4 +1,58 @@
+{% extends 'base.html' %}
 {% block content %}
-    <h1>Tabla de Usuarios</h1>
-    <!-- Tu tabla de usuarios y contenido específico aquí -->
+<main id="formularioCrearUsuario" style="display: none;">
+    <form action="{{ url_for('insertar_elemento') }}" method="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="correo">Correo Electrónico:</label>
+        <input type="email" id="correo" name="correo" required>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" required>
+
+        <input type="submit" value="Crear Registro">
+        <input type="submit" id="cancelar" value="Cancelar">
+    </form>
+</main>
+
+<main>
+
+    <div class="content-container">
+        <h1>Tabla de Usuarios</h1>
+        <a href="#" id="mostrarFormulario">Crear Nuevo Usuario</a>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo Electrónico</th>
+                    <th>Edad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td data-user-id="{{ usuario.id }}">{{ usuario.id }}</td>
+                    <td contenteditable="false" class="editable" data-field="nombre">{{ usuario.nombre }}</td>
+                    <td contenteditable="false" class="editable" data-field="correo">{{ usuario.correo }}</td>
+                    <td contenteditable="false" class="editable" data-field="edad">{{ usuario.edad }}</td>
+                    <td style="display: flex; justify-content: space-evenly;">
+                        <button class="edit-button">Editar</button>
+                        <form action="{{ url_for('delete_element', index=loop.index0) }}" method="POST">
+                            <input type="submit" value="Eliminar">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</main>
+
+</div>
+
 {% endblock %}
