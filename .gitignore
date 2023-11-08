@@ -7,5 +7,7 @@ __pycache/
 *.iml
 *.iws
 *.ipr
+*.iml
+*.xml
 .idea_modules/
 out/

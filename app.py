@@ -26,7 +26,7 @@ def utility_processor():
 
 # Simulación de una base de datos de usuarios
 usuarios2 = {
-    "1": {"id": "1", "username": "Gustavo Burgos", "password": "contrasena6"}}
+    "1": {"id": "1", "username": "Gustavo", "password": "1234"}}
 
 # Datos ficticios para la tabla de usuarios
 usuarios = [
