@@ -3,3 +3,12 @@ virtualenv/
 env/
 __pycache/
 *.pvc
+
+
+.idea/
+*.iml
+*.iws
+*.ipr
+*.iws
+.idea_modules/
+out/
