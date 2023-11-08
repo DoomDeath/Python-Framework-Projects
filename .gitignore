@@ -2,13 +2,10 @@ venv/
 virtualenv/
 env/
 __pycache/
-*.pvc
-
-
+*.pyc
 .idea/
 *.iml
 *.iws
 *.ipr
-*.iws
 .idea_modules/
 out/

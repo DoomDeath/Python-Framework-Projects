@@ -1,11 +1,9 @@
 import datetime
 
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 
-
 app = Flask(__name__)
-
 
 app.secret_key = '12345678'  # Cambia esto a una clave secreta segura
 
@@ -30,18 +28,17 @@ def utility_processor():
 usuarios2 = {
     "1": {"id": "1", "username": "Gustavo Burgos", "password": "contrasena6"}}
 
-
 # Datos ficticios para la tabla de usuarios
 usuarios = [
     {"id": 1, "nombre": "John Doe", "correo": "johndoe@example.com", "edad": 30},
     {"id": 2, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
     {"id": 3, "nombre": "Robert Johnson",
-        "correo": "robert@example.com", "edad": 35},
-    {"id": 2, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
-    {"id": 2, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
-    {"id": 2, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
-    {"id": 2, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
-    {"id": 2, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25}
+     "correo": "robert@example.com", "edad": 35},
+    {"id": 4, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
+    {"id": 5, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
+    {"id": 6, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
+    {"id": 7, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
+    {"id": 8, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25}
 
 ]
 
@@ -123,6 +120,7 @@ def panel():
                      "cuenta de usuario.")
     return render_template('panel.html', panel_title=panel_title, panel_content=panel_content)
 
+
 # Ruta para eliminar un elemento por su índice
 
 
@@ -138,21 +136,22 @@ def delete_element(index):
 
         return redirect(url_for('tabla_usuarios'))
 
+
 # Crea una ruta "insertar" para agregar un nuevo usuario a la lista
 
 
 @app.route('/insertar', methods=['POST'])
 # Debes reemplazar esto con tu decorador de autenticación real
+@login_required
 def insertar_elemento():
     if request.method == 'POST':
         # Obtén los datos del nuevo usuario desde la solicitud
         nombre = request.form["nombre"]
         correo = request.form["correo"]
         edad = request.form["edad"]
-        id = 'NONE'
         # Crear un nuevo diccionario de usuario
         nuevo_usuario = {
-            "id" : id,
+            "id": len(usuarios) + 1,
             "nombre": nombre,
             "correo": correo,
             "edad": edad
@@ -165,22 +164,32 @@ def insertar_elemento():
     return redirect(url_for('tabla_usuarios'))
 
 
-@app.route('/update_user/<int:user_id>', methods=['POST'])
-def update_user(user_id):
-    # Recibe los datos actualizados del usuario y actualiza la lista de usuarios
-    nombre = request.form.get('nombre')
-    correo = request.form.get('correo')
-    edad = request.form.get('edad')
+@app.route('/updateData', methods=['POST'])
+@login_required
+def editar_datos():
+    data = request.get_json()  # Obtener los datos del cuerpo de la solicitud en formato JSON
 
-    # Encuentra el usuario por su ID y actualiza los datos
+    # Verifica si el ID del usuario está presente en los datos recibidos
+    if 'user_id' not in data:
+        return jsonify({'mensaje': 'Falta el ID del usuario'}), 400  # Respuesta de error
+
+    user_id = data['user_id']
+
+    # Busca el usuario por su ID en la lista de usuarios
     for usuario in usuarios:
-        if usuario['id'] == user_id:
-            usuario['nombre'] = nombre
-            usuario['correo'] = correo
-            usuario['edad'] = edad
+        if usuario['id'] == int(user_id):
+            # Actualiza los campos si están presentes en los datos
+            if 'nombre' in data:
+                usuario['nombre'] = data['nombre']
+            if 'correo' in data:
+                usuario['correo'] = data['correo']
+            if 'edad' in data:
+                usuario['edad'] = data['edad']
 
-    return redirect(url_for('tabla_usuarios'))
+            return jsonify({'mensaje': 'Datos guardados exitosamente'})
 
+    # Devuelve un mensaje de error si no se encuentra el usuario con el ID dado
+    return jsonify({'mensaje': 'Usuario no encontrado'}), 404
 
 
 if __name__ == '__main__':

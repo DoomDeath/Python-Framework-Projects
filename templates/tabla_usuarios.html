@@ -25,7 +25,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>N°</th>
                     <th>Nombre</th>
                     <th>Correo Electrónico</th>
                     <th>Edad</th>
@@ -35,10 +35,10 @@
             <tbody>
                 {% for usuario in usuarios %}
                 <tr>
-                    <td data-user-id="{{ usuario.id }}">{{ usuario.id }}</td>
-                    <td contenteditable="false" class="editable" data-field="nombre">{{ usuario.nombre }}</td>
-                    <td contenteditable="false" class="editable" data-field="correo">{{ usuario.correo }}</td>
-                    <td contenteditable="false" class="editable" data-field="edad">{{ usuario.edad }}</td>
+                    <td>{{ loop.index }}</td>
+                    <td data-user-id="{{ usuario.id }}" contenteditable="false" class="editable" data-field-name="nombre">{{ usuario.nombre }}</td>
+                    <td contenteditable="false" class="editable" data-field-name="correo">{{ usuario.correo }}</td>
+                    <td contenteditable="false" class="editable" data-field-name="edad">{{ usuario.edad }}</td>
                     <td style="display: flex; justify-content: space-evenly;">
                         <button class="edit-button">Editar</button>
                         <form action="{{ url_for('delete_element', index=loop.index0) }}" method="POST">
@@ -49,7 +49,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        
+
     </div>
 </main>
 
