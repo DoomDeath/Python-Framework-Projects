@@ -3,6 +3,8 @@ import datetime
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 
+from models.usuarios import Usuario, database
+
 app = Flask(__name__)
 
 app.secret_key = '12345678'  # Cambia esto a una clave secreta segura
@@ -63,6 +65,22 @@ def load_user(user_id):
 # Ruta para el inicio de sesión
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    try:
+        # Intenta conectar a la base de datos
+        database.connect()
+        print("Conexión exitosa a la base de datos PostgreSQL.")
+    except Exception as e:
+        print(f"Error al conectar a la base de datos: {str(e)}")
+    finally:
+        # Asegúrate de cerrar la conexión
+        if not database.is_closed():
+            database.close()
+
+    usuarios = Usuario.select()
+    for usuario in usuarios:
+        print(
+            f"ID: {usuario.id}, Nombre de Usuario: {usuario.nombre_usuario}, Correo Electrónico: {usuario.correo_electronico}, Fecha de Registro: {usuario.fecha_registro}")
+
     current_page = 'index'  # Valor por defecto para la página de inicio
 
     if request.method == "POST":
