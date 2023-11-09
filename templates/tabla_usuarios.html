@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
 <main id="formularioCrearUsuario" style="display: none;">
-    <form action="{{ url_for('insertar_elemento') }}" method="POST">
+    <form action="{{ url_for('insertar_usuario') }}" method="POST">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" required>
 
         <label for="correo">Correo Electrónico:</label>
         <input type="email" id="correo" name="correo" required>
 
-        <label for="edad">Edad:</label>
-        <input type="number" id="edad" name="edad" required>
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" name="contrasena" required>
 
         <input type="submit" value="Crear Registro">
         <input type="submit" id="cancelar" value="Cancelar">
@@ -28,7 +28,9 @@
                     <th>N°</th>
                     <th>Nombre</th>
                     <th>Correo Electrónico</th>
-                    <th>Edad</th>
+                    <th>Contraseña</th>
+                    <th>Fecha de registro</th>
+                    <th>Fecha de Actualizacion</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -36,12 +38,14 @@
                 {% for usuario in usuarios %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td data-user-id="{{ usuario.id }}" contenteditable="false" class="editable" data-field-name="nombre">{{ usuario.nombre }}</td>
-                    <td contenteditable="false" class="editable" data-field-name="correo">{{ usuario.correo }}</td>
-                    <td contenteditable="false" class="editable" data-field-name="edad">{{ usuario.edad }}</td>
+                    <td data-user-id="{{ usuario.id }}" contenteditable="false" class="editable" data-field-name="nombre">{{ usuario.nombre_usuario }}</td>
+                    <td contenteditable="false" class="editable" data-field-name="correo">{{ usuario.correo_electronico }}</td>
+                    <td contenteditable="false" class="editable" data-field-name="Contrasena">{{ usuario.contrasena }}</td>
+                    <td>{{ usuario.fecha_registro }}</td>
+                    <td>{{ fecha_actualizacion }}</td>
                     <td style="display: flex; justify-content: space-evenly;">
                         <button class="edit-button">Editar</button>
-                        <form action="{{ url_for('delete_element', index=loop.index0) }}" method="POST">
+                        <form action="{{ url_for('delete_element', index=usuario.id) }}" method="POST">
                             <input type="submit" value="Eliminar">
                         </form>
                     </td>

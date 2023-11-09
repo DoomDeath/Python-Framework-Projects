@@ -1,10 +1,9 @@
-from flask import request, render_template, session, redirect, url_for
 import datetime
 
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
-from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
+from flask_login import LoginManager, login_user, logout_user, login_required
 
-from models.usuarios import User, database
+from models.usuarios import Usuarios
 from models.utilDB import probar_connecion
 
 app = Flask(__name__)
@@ -44,6 +43,7 @@ usuarios = [
 @app.route('/table_user')
 @login_required
 def tabla_usuarios():
+    usuarios = Usuarios.select()
     return render_template('tabla_usuarios.html', usuarios=usuarios)
 
 
@@ -51,8 +51,8 @@ def tabla_usuarios():
 @login_manager.user_loader
 def load_user(user_id):
     try:
-        return User.get(User.id == user_id)
-    except Usuario.DoesNotExist:
+        return Usuarios.get(Usuarios.id == user_id)
+    except Usuarios.DoesNotExist:
         return None
 
 
@@ -63,12 +63,14 @@ def load_user(user_id):
 def login():
     current_page = 'index'
 
+    print(probar_connecion())
+
     if request.method == "POST":
         username = request.form["username"].strip()
         password = request.form["password"].strip()
 
-        user = User.get_or_none(
-            (User.nombre_usuario == username) & (User.contrasena == password))
+        user = Usuarios.get_or_none(
+            (Usuarios.nombre_usuario == username) & (Usuarios.contrasena == password))
 
         if user:
             login_user(user)
@@ -111,9 +113,10 @@ def delete_element(index):
     if request.method == 'POST':
         try:
             # Eliminar el elemento por su índice
-            del usuarios[index]
-        except IndexError:
-            pass  # Manejar el caso en el que el índice no existe
+            usuario_a_eliminar = Usuarios.get(Usuarios.id == index)
+            usuario_a_eliminar.delete_instance()
+        except Usuarios.DoesNotExist:
+            print(f"Usuario con ID {index} no encontrado en la base de datos.")
 
         return redirect(url_for('tabla_usuarios'))
 
@@ -124,25 +127,23 @@ def delete_element(index):
 @app.route('/insertar', methods=['POST'])
 # Debes reemplazar esto con tu decorador de autenticación real
 @login_required
-def insertar_elemento():
+def insertar_usuario():
     if request.method == 'POST':
-        # Obtén los datos del nuevo usuario desde la solicitud
         nombre = request.form["nombre"]
         correo = request.form["correo"]
-        edad = request.form["edad"]
-        # Crear un nuevo diccionario de usuario
-        nuevo_usuario = {
-            "id": len(usuarios) + 1,
-            "nombre": nombre,
-            "correo": correo,
-            "edad": edad
-        }
+        contrasena = request.form["contrasena"]
 
-        if nuevo_usuario:
-            # Agrega el nuevo usuario a la lista
-            usuarios.append(nuevo_usuario)
-
-    return redirect(url_for('tabla_usuarios'))
+        # Verificar si el usuario ya existe en la base de datos
+        if not Usuarios.select().where(
+                (Usuarios.nombre_usuario == nombre) | (Usuarios.correo_electronico == correo)).exists():
+            nuevo_usuario = Usuarios.create(
+                nombre_usuario=nombre,
+                correo_electronico=correo,
+                contrasena=contrasena
+            )
+            return redirect(url_for('tabla_usuarios'))
+        else:
+            return "El usuario ya existe en la base de datos."
 
 
 @app.route('/updateData', methods=['POST'])
