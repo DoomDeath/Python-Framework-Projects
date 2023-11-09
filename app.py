@@ -1,9 +1,11 @@
+from flask import request, render_template, session, redirect, url_for
 import datetime
 
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 
-from models.usuarios import Usuario, database
+from models.usuarios import User, database
+from models.utilDB import probar_connecion
 
 app = Flask(__name__)
 
@@ -12,12 +14,6 @@ app.secret_key = '12345678'  # Cambia esto a una clave secreta segura
 # Configura el LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-
-# Modelo de usuario de ejemplo
-class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
 
 
 @app.context_processor
@@ -45,11 +41,6 @@ usuarios = [
 ]
 
 
-@app.route("/registrar_modal")
-def registrar_modal():
-    return render_template("registrar_modal.html")
-
-
 @app.route('/table_user')
 @login_required
 def tabla_usuarios():
@@ -59,48 +50,31 @@ def tabla_usuarios():
 # Función para cargar un usuario por ID
 @login_manager.user_loader
 def load_user(user_id):
-    return User(user_id)
+    try:
+        return User.get(User.id == user_id)
+    except Usuario.DoesNotExist:
+        return None
 
 
 # Ruta para el inicio de sesión
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    try:
-        # Intenta conectar a la base de datos
-        database.connect()
-        print("Conexión exitosa a la base de datos PostgreSQL.")
-    except Exception as e:
-        print(f"Error al conectar a la base de datos: {str(e)}")
-    finally:
-        # Asegúrate de cerrar la conexión
-        if not database.is_closed():
-            database.close()
-
-    usuarios = Usuario.select()
-    for usuario in usuarios:
-        print(
-            f"ID: {usuario.id}, Nombre de Usuario: {usuario.nombre_usuario}, Correo Electrónico: {usuario.correo_electronico}, Fecha de Registro: {usuario.fecha_registro}")
-
-    current_page = 'index'  # Valor por defecto para la página de inicio
+    current_page = 'index'
 
     if request.method == "POST":
         username = request.form["username"].strip()
         password = request.form["password"].strip()
 
-        user_final = None
-        for user in usuarios2.values():
-            if user["username"] == username and user["password"] == password:
-                user_final = user
-                break
+        user = User.get_or_none(
+            (User.nombre_usuario == username) & (User.contrasena == password))
 
-        if user_final:
-            user_obj = User(user_final["id"])
-            isLogged = login_user(user_obj)
-            session['logged'] = isLogged
-            session['user'] = user_final["username"]
+        if user:
+            login_user(user)
+            session['logged'] = True
+            session['user'] = username
             current_page = ''
-
-            # Redirige a la página de panel después de iniciar sesión
             return render_template('panel.html', current_page=current_page)
 
     return render_template("index.html", current_page=current_page)
@@ -117,17 +91,6 @@ def logout():
 @app.route('/')
 def index():
     return render_template('index.html', current_page='/')
-
-
-@app.route('/acerca')
-def acerca():
-    current_page = 'acerca'
-    return render_template('acerca.html', current_page=current_page)
-
-
-@app.route('/contacto')
-def contacto():
-    return render_template('contacto.html')
 
 
 @app.route('/panel')
@@ -185,11 +148,13 @@ def insertar_elemento():
 @app.route('/updateData', methods=['POST'])
 @login_required
 def editar_datos():
-    data = request.get_json()  # Obtener los datos del cuerpo de la solicitud en formato JSON
+    # Obtener los datos del cuerpo de la solicitud en formato JSON
+    data = request.get_json()
 
     # Verifica si el ID del usuario está presente en los datos recibidos
     if 'user_id' not in data:
-        return jsonify({'mensaje': 'Falta el ID del usuario'}), 400  # Respuesta de error
+        # Respuesta de error
+        return jsonify({'mensaje': 'Falta el ID del usuario'}), 400
 
     user_id = data['user_id']
 
