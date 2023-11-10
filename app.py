@@ -3,7 +3,7 @@ import datetime
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required
 
-from models.usuarios import Usuarios
+from models.usuario import Usuario, Roles
 from models.utilDB import probar_connecion
 
 app = Flask(__name__)
@@ -43,16 +43,19 @@ usuarios = [
 @app.route('/table_user')
 @login_required
 def tabla_usuarios():
-    usuarios = Usuarios.select()
-    return render_template('tabla_usuarios.html', usuarios=usuarios)
+    usuarios = Usuario.select()
+    roles = Roles.select()
+    for role in roles:
+        print(role.nombre_rol)
+    return render_template('tabla_usuarios.html', usuarios=usuarios, roles=roles)
 
 
 # Función para cargar un usuario por ID
 @login_manager.user_loader
 def load_user(user_id):
     try:
-        return Usuarios.get(Usuarios.id == user_id)
-    except Usuarios.DoesNotExist:
+        return Usuario.get(Usuario.id == user_id)
+    except Usuario.DoesNotExist:
         return None
 
 
@@ -69,8 +72,8 @@ def login():
         username = request.form["username"].strip()
         password = request.form["password"].strip()
 
-        user = Usuarios.get_or_none(
-            (Usuarios.nombre_usuario == username) & (Usuarios.contrasena == password))
+        user = Usuario.get_or_none(
+            (Usuario.nombre_usuario == username) & (Usuario.contrasena == password))
 
         if user:
             login_user(user)
@@ -113,9 +116,9 @@ def delete_element(index):
     if request.method == 'POST':
         try:
             # Eliminar el elemento por su índice
-            usuario_a_eliminar = Usuarios.get(Usuarios.id == index)
+            usuario_a_eliminar = Usuario.get(Usuario.id == index)
             usuario_a_eliminar.delete_instance()
-        except Usuarios.DoesNotExist:
+        except Usuario.DoesNotExist:
             print(f"Usuario con ID {index} no encontrado en la base de datos.")
 
         return redirect(url_for('tabla_usuarios'))
@@ -132,11 +135,13 @@ def insertar_usuario():
         nombre = request.form["nombre"]
         correo = request.form["correo"]
         contrasena = request.form["contrasena"]
+        rol = request.form.get("rol")
+        print(rol)
 
         # Verificar si el usuario ya existe en la base de datos
-        if not Usuarios.select().where(
-                (Usuarios.nombre_usuario == nombre) | (Usuarios.correo_electronico == correo)).exists():
-            nuevo_usuario = Usuarios.create(
+        if not Usuario.select().where(
+                (Usuario.nombre_usuario == nombre) | (Usuario.correo_electronico == correo)).exists():
+            nuevo_usuario = Usuario.create(
                 nombre_usuario=nombre,
                 correo_electronico=correo,
                 contrasena=contrasena

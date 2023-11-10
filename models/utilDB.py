@@ -1,4 +1,4 @@
-from models.usuarios import db
+from models.usuario import db
 
 
 def probar_connecion():
