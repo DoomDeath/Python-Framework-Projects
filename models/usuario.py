@@ -76,15 +76,17 @@ class Acceso(Model):
 
     class Meta:
         database = db
+        db_table = 'accesos'
 
 
 # Definición del modelo Registro_de_Actividades
 class RegistroDeActividades(Model):
     registro_id = IntegerField(primary_key=True)
-    usuario = ForeignKeyField(Usuario, backref='actividades')
+    usuario = IntegerField(Usuario, db_column='usuario_id')
     accion = CharField(max_length=255)
     fecha_hora = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
     descripcion = TextField(null=True)
 
     class Meta:
         database = db
+        db_table = 'registro_de_actividades'

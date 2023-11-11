@@ -11,10 +11,10 @@
             <label for="contrasena">Contraseña:</label>
             <input type="password" id="contrasena" name="contrasena" required>
 
-            <label for="contrasena">Tipo de usuario</label>
-            <select name="rol" style="margin-top: 1rem; margin-bottom: 1rem;">
+            <label for="roles">Tipo de usuario</label>
+            <select name="roles" style="margin-top: 1rem; margin-bottom: 1rem;">
                 {% for role in roles %}
-                    <option value="{{ role.id }}">{{ role.nombre_rol }}</option>
+                    <option name="roles" value="{{ role }}|{{ role.nombre_rol }}">{{ role.nombre_rol }}</option>
                 {% endfor %}
             </select>
 

@@ -2,9 +2,11 @@ import datetime
 
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required
+from psycopg2 import IntegrityError
 
-from models.usuario import Usuario, Roles
+from models.usuario import Acceso, RegistroDeActividades, Usuario, Roles
 from models.utilDB import probar_connecion
+from utils.utils import RegistroActividades
 
 app = Flask(__name__)
 
@@ -38,6 +40,7 @@ usuarios = [
     {"id": 8, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25}
 
 ]
+
 
 
 @app.route('/table_user')
@@ -77,6 +80,7 @@ def login():
 
         if user:
             login_user(user)
+            session['id'] = user.id
             session['logged'] = True
             session['user'] = username
             current_page = ''
@@ -115,13 +119,26 @@ def panel():
 def delete_element(index):
     if request.method == 'POST':
         try:
-            # Eliminar el elemento por su índice
+            # Recupera los accesos asociados al usuario
+            accesos_a_eliminar = Acceso.select().where(Acceso.usuario_id == index)
+
+            # Elimina los accesos asociados
+            for acceso in accesos_a_eliminar:
+                acceso.delete_instance()
+
+             # Ahora puedes eliminar el usuario
             usuario_a_eliminar = Usuario.get(Usuario.id == index)
             usuario_a_eliminar.delete_instance()
-        except Usuario.DoesNotExist:
-            print(f"Usuario con ID {index} no encontrado en la base de datos.")
 
-        return redirect(url_for('tabla_usuarios'))
+            # Registrar accion
+            RegistroActividades.registrar_actividades(
+                str(session['id']), "ELIMINAR", "SE ELIMINA USUARIO DEL SISTEMA: " + usuario_a_eliminar.nombre_usuario)
+
+        except IntegrityError as e:
+            # Manejar la excepción de integridad referencial
+            print(f"Error de integridad referencial: {e}")
+
+    return redirect(url_for('tabla_usuarios'))
 
 
 # Crea una ruta "insertar" para agregar un nuevo usuario a la lista
@@ -135,8 +152,8 @@ def insertar_usuario():
         nombre = request.form["nombre"]
         correo = request.form["correo"]
         contrasena = request.form["contrasena"]
-        rol = request.form.get("rol")
-        print(rol)
+        rol = request.form["roles"]
+        id_rol, nombre_rol = rol.split('|')
 
         # Verificar si el usuario ya existe en la base de datos
         if not Usuario.select().where(
@@ -144,8 +161,18 @@ def insertar_usuario():
             nuevo_usuario = Usuario.create(
                 nombre_usuario=nombre,
                 correo_electronico=correo,
-                contrasena=contrasena
+                contrasena=contrasena,
+                tipo_usuario=nombre_rol
             )
+            nuevo_acceso = Acceso.create(
+                usuario_id=nuevo_usuario,
+                rol_id=int(id_rol)
+            )
+
+            # Registrar accion
+            RegistroActividades.registrar_actividades(
+                str(session['id']), "REGISTRO", f"SE REGISTRA POR USUARIO: {session['user']} - SE HA CREADO UN NUEVO USUARIO: {nombre}")
+
             return redirect(url_for('tabla_usuarios'))
         else:
             return "El usuario ya existe en la base de datos."
