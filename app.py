@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify
+from flask import Flask, flash, render_template, redirect, url_for, request, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required
 from psycopg2 import IntegrityError
 
@@ -175,7 +175,9 @@ def insertar_usuario():
 
             return redirect(url_for('tabla_usuarios'))
         else:
-            return "El usuario ya existe en la base de datos."
+            mensaje_alerta = "El usuario ya existe en la base de datos."
+
+    return redirect(url_for('tabla_usuarios', mensaje_alerta=mensaje_alerta))
 
 
 @app.route('/updateData', methods=['POST'])
