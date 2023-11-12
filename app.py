@@ -172,12 +172,14 @@ def insertar_usuario():
             # Registrar accion
             RegistroActividades.registrar_actividades(
                 str(session['id']), "REGISTRO", f"SE REGISTRA POR USUARIO: {session['user']} - SE HA CREADO UN NUEVO USUARIO: {nombre}")
-
+            flash("Usuario creado exitosamente", "success")
             return redirect(url_for('tabla_usuarios'))
         else:
-            mensaje_alerta = "El usuario ya existe en la base de datos."
+            flash("El usuario ya existe en la base de datos.", "error")
+            print("Mensaje almacenado en flash:", flash("El usuario ya existe en la base de datos.", "error"))
 
-    return redirect(url_for('tabla_usuarios', mensaje_alerta=mensaje_alerta))
+
+    return redirect(url_for('tabla_usuarios'))
 
 
 @app.route('/updateData', methods=['POST'])

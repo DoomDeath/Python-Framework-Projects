@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='alert.css') }}">
 <main id="formularioCrearUsuario" style="display: none;">
     <form action="{{ url_for('insertar_usuario') }}" method="POST">
         <label for="nombre">Nombre:</label>
@@ -22,13 +23,19 @@
         <input type="submit" value="Crear Registro">
         <input type="submit" id="cancelar" value="Cancelar">
         <br>
-        {% if mensaje_alerta %}
-        <script>
-            alert("{{ mensaje_alerta }}");
-        </script>
-        {% endif %}
+
     </form>
+
 </main>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div id="flash-messages">
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endwith %}
 
 <main>
 
