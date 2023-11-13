@@ -85,7 +85,7 @@ def login():
             session['user'] = username
             current_page = ''
             return render_template('panel.html', current_page=current_page)
-
+    flash("Error al iniciar sesión. Verifica tus credenciales e inténtalo de nuevo.", "error")
     return render_template("index.html", current_page=current_page)
 
 
@@ -133,6 +133,7 @@ def delete_element(index):
             # Registrar accion
             RegistroActividades.registrar_actividades(
                 str(session['id']), "ELIMINAR", "SE ELIMINA USUARIO DEL SISTEMA: " + usuario_a_eliminar.nombre_usuario)
+            flash("Usuario eliminado exitosamente", "success")
 
         except IntegrityError as e:
             # Manejar la excepción de integridad referencial
@@ -176,7 +177,6 @@ def insertar_usuario():
             return redirect(url_for('tabla_usuarios'))
         else:
             flash("El usuario ya existe en la base de datos.", "error")
-            print("Mensaje almacenado en flash:", flash("El usuario ya existe en la base de datos.", "error"))
 
 
     return redirect(url_for('tabla_usuarios'))
