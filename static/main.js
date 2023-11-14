@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 if (fieldName === "TipoUsuario") {
+                    const tipoUsuarioSelectId = `tipo-usuario-select-${loop.index}`;
+                    const tipoUsuarioSelect = row.querySelector(`#${tipoUsuarioSelectId}`);
                     if (cell.getAttribute("contenteditable") === "false") {
                         cell.setAttribute("contenteditable", "true");
                         tipoUsuarioLabel.style.display = "none";
@@ -47,6 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         cell.setAttribute("contenteditable", "false");
                         tipoUsuarioLabel.style.display = "block";
                         tipoUsuarioSelect.style.display = "none";
+                        // Obtener el valor seleccionado del combobox y agregarlo a dataToSave
+                        const selectedValue = tipoUsuarioSelect.value;
+                        console.log("Seleccionado:", selectedValue);
+
                     }
                 }
             });
