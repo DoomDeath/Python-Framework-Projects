@@ -1,49 +1,49 @@
 {% extends 'base.html' %}
 {% block content %}
-    <main id="formularioCrearUsuario" style="display: none;">
-        <form action="{{ url_for('insertar_usuario') }}" method="POST">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
+<main id="formularioCrearUsuario" style="display: none;">
+    <form action="{{ url_for('insertar_usuario') }}" method="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
 
-            <label for="correo">Correo Electrónico:</label>
-            <input type="email" id="correo" name="correo" required>
+        <label for="correo">Correo Electrónico:</label>
+        <input type="email" id="correo" name="correo" required>
 
-            <label for="contrasena">Contraseña:</label>
-            <input type="password" id="contrasena" name="contrasena" required>
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" name="contrasena" required>
 
-            <label for="roles">Tipo de usuario</label>
-            <select name="roles" style="margin-top: 1rem; margin-bottom: 1rem;">
-                {% for role in roles %}
-                    <option name="roles" value="{{ role }}|{{ role.nombre_rol }}">{{ role.nombre_rol }}</option>
-                {% endfor %}
-            </select>
+        <label for="roles">Tipo de usuario</label>
+        <select name="roles" style="margin-top: 1rem; margin-bottom: 1rem;">
+            {% for role in roles %}
+            <option name="roles" value="{{ role }}|{{ role.nombre_rol }}">{{ role.nombre_rol }}</option>
+            {% endfor %}
+        </select>
 
-            <br>
-            <input type="submit" value="Crear Registro">
-            <input type="submit" id="cancelar" value="Cancelar">
-            <br>
+        <br>
+        <input type="submit" value="Crear Registro">
+        <input type="submit" id="cancelar" value="Cancelar">
+        <br>
 
-        </form>
+    </form>
 
-    </main>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div id="flash-messages">
-                {% for message in messages %}
-                    <div class="alert alert-success">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+</main>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div id="flash-messages">
+    {% for message in messages %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
 
-    <main>
+<main>
 
-        <div class="content-container">
-            <h1>Tabla de Usuarios</h1>
-            <a href="#" id="mostrarFormulario">Crear Nuevo Usuario</a>
+    <div class="content-container">
+        <h1>Tabla de Usuarios</h1>
+        <a href="#" id="mostrarFormulario">Crear Nuevo Usuario</a>
 
-            <table>
-                <thead>
+        <table>
+            <thead>
                 <tr>
                     <th>N°</th>
                     <th>Nombre</th>
@@ -54,45 +54,44 @@
                     <th>Fecha de Actualizacion</th>
                     <th>Acciones</th>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 {% for usuario in usuarios %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td data-user-id="{{ usuario.id }}" contenteditable="false" class="editable"
-                            data-field-name="nombre">{{ usuario.nombre_usuario }}</td>
-                        <td contenteditable="false" class="editable"
-                            data-field-name="correo">{{ usuario.correo_electronico }}</td>
-                        <td contenteditable="false" class="editable"
-                            data-field-name="Contrasena">{{ usuario.contrasena }}
-                        </td>
-                        <td contenteditable="false" class="editable" data-field-name="TipoUsuario">
-                            <span class="tipo-usuario-label">{{ usuario.tipo_usuario }}</span>
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td data-user-id="{{ usuario.id }}" contenteditable="false" class="editable"
+                        data-field-name="nombre">{{ usuario.nombre_usuario }}</td>
+                    <td contenteditable="false" class="editable" data-field-name="correo">{{ usuario.correo_electronico
+                        }}</td>
+                    <td contenteditable="false" class="editable" data-field-name="Contrasena">{{ usuario.contrasena }}
+                    </td>
+                    <td contenteditable="false" class="editable" data-field-name="TipoUsuario">
+                        <span class="tipo-usuario-label">{{ usuario.tipo_usuario }}</span>
 
-                            <select class="tipo-usuario-select" style="display: none;"
-                                    id="tipo-usuario-select-{{ loop.index }}">
-                                {% for role in roles %}
-                                    <option value="{{ role.id }}">{{ role.nombre_rol }}</option>
-                                {% endfor %}
-                            </select>
+                        <select class="tipo-usuario-select" style="display: none;"
+                            id="tipo-usuario-select-{{ loop.index }}">
+                            {% for role in roles %}
+                            <option value="{{ role.id }}">{{ role.nombre_rol }}</option>
+                            {% endfor %}
+                        </select>
 
-                        </td>
-                        <td>{{ usuario.fecha_registro }}</td>
-                        <td>{{ fecha_actualizacion }}</td>
-                        <td style="display: flex; justify-content: space-evenly;">
-                            <button class="edit-button">Editar</button>
-                            <form action="{{ url_for('delete_element', index=usuario.id) }}" method="POST">
-                                <input type="submit" value="Eliminar">
-                            </form>
-                        </td>
-                    </tr>
+                    </td>
+                    <td>{{ usuario.fecha_registro }}</td>
+                    <td>{{ usuario.fecha_actualizacion }}</td>
+                    <td style="display: flex; justify-content: space-evenly;">
+                        <button class="edit-button">Editar</button>
+                        <form action="{{ url_for('delete_element', index=usuario.id) }}" method="POST">
+                            <input type="submit" value="Eliminar">
+                        </form>
+                    </td>
+                </tr>
                 {% endfor %}
-                </tbody>
-            </table>
-
-        </div>
-    </main>
+            </tbody>
+        </table>
 
     </div>
+</main>
+
+</div>
 
 {% endblock %}

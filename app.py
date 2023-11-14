@@ -1,10 +1,10 @@
-import datetime
 
+import datetime
 from flask import Flask, flash, render_template, redirect, url_for, request, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required
 from psycopg2 import IntegrityError
 
-from models.usuario import Acceso, RegistroDeActividades, Usuario, Roles
+from models.usuario import Acceso, Usuario, Roles
 from models.utilDB import probar_connecion
 from utils.utils import RegistroActividades
 
@@ -21,26 +21,6 @@ login_manager.init_app(app)
 def utility_processor():
     fecha_actual = datetime.date.today()
     return {'fecha_actual': fecha_actual}
-
-
-# Simulación de una base de datos de usuarios
-usuarios2 = {
-    "1": {"id": "1", "username": "Gustavo", "password": "1234"}}
-
-# Datos ficticios para la tabla de usuarios
-usuarios = [
-    {"id": 1, "nombre": "John Doe", "correo": "johndoe@example.com", "edad": 30},
-    {"id": 2, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
-    {"id": 3, "nombre": "Robert Johnson",
-     "correo": "robert@example.com", "edad": 35},
-    {"id": 4, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
-    {"id": 5, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
-    {"id": 6, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
-    {"id": 7, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25},
-    {"id": 8, "nombre": "Jane Smith", "correo": "janesmith@example.com", "edad": 25}
-
-]
-
 
 
 @app.route('/table_user')
@@ -146,7 +126,6 @@ def delete_element(index):
 
 
 @app.route('/insertar', methods=['POST'])
-# Debes reemplazar esto con tu decorador de autenticación real
 @login_required
 def insertar_usuario():
     if request.method == 'POST':
@@ -156,28 +135,33 @@ def insertar_usuario():
         rol = request.form["roles"]
         id_rol, nombre_rol = rol.split('|')
 
-        # Verificar si el usuario ya existe en la base de datos
-        if not Usuario.select().where(
-                (Usuario.nombre_usuario == nombre) | (Usuario.correo_electronico == correo)).exists():
-            nuevo_usuario = Usuario.create(
-                nombre_usuario=nombre,
-                correo_electronico=correo,
-                contrasena=contrasena,
-                tipo_usuario=nombre_rol
-            )
-            nuevo_acceso = Acceso.create(
-                usuario_id=nuevo_usuario,
-                rol_id=int(id_rol)
-            )
+        try:
+            # Verificar si el usuario ya existe en la base de datos
+            if not Usuario.select().where(
+                    (Usuario.nombre_usuario == nombre) | (Usuario.correo_electronico == correo)).exists():
+                # Crear un nuevo usuario y acceso en la base de datos
+                nuevo_usuario = Usuario.create(
+                    nombre_usuario=nombre,
+                    correo_electronico=correo,
+                    contrasena=contrasena,
+                    tipo_usuario=nombre_rol
+                )
+                nuevo_acceso = Acceso.create(
+                    usuario_id=nuevo_usuario,
+                    rol_id=int(id_rol)
+                )
 
-            # Registrar accion
-            RegistroActividades.registrar_actividades(
-                str(session['id']), "REGISTRO", f"SE REGISTRA POR USUARIO: {session['user']} - SE HA CREADO UN NUEVO USUARIO: {nombre}")
-            flash("Usuario creado exitosamente", "success")
-            return redirect(url_for('tabla_usuarios'))
-        else:
-            flash("El usuario ya existe en la base de datos.", "error")
-
+                # Registrar acción
+                RegistroActividades.registrar_actividades(
+                    str(session['id']), "REGISTRO",
+                    f"SE REGISTRA POR USUARIO: {session['user']} - SE HA CREADO UN NUEVO USUARIO: {nombre}"
+                )
+                flash("Usuario creado exitosamente", "success")
+            else:
+                flash("El usuario ya existe en la base de datos.", "error")
+        except Exception as e:
+            # Manejar otras excepciones si es necesario
+            flash(f"Error al crear el usuario: {str(e)}", "error")
 
     return redirect(url_for('tabla_usuarios'))
 
@@ -193,23 +177,43 @@ def editar_datos():
         # Respuesta de error
         return jsonify({'mensaje': 'Falta el ID del usuario'}), 400
 
-    user_id = data['user_id']
+    try:
+        # Obtiene el objeto de rol basado en el nombre de rol proporcionado
+        rol = Roles.get(Roles.nombre_rol == data['TipoUsuario'])
 
-    # Busca el usuario por su ID en la lista de usuarios
-    for usuario in usuarios:
-        if usuario['id'] == int(user_id):
-            # Actualiza los campos si están presentes en los datos
-            if 'nombre' in data:
-                usuario['nombre'] = data['nombre']
-            if 'correo' in data:
-                usuario['correo'] = data['correo']
-            if 'edad' in data:
-                usuario['edad'] = data['edad']
+        # Define los nuevos valores para el usuario
+        nuevos_valores = {
+            'nombre_usuario': data['nombre'],
+            'correo_electronico': data['correo'],
+            'contrasena': data['Contrasena'],
+            'tipo_usuario': data['TipoUsuario'],
+            'fecha_actualizacion': datetime.date.today()
+        }
 
-            return jsonify({'mensaje': 'Datos guardados exitosamente'})
+        # Actualiza el usuario en la base de datos
+        Usuario.update(**nuevos_valores).where(Usuario.id ==
+                                               data['user_id']).execute()
 
-    # Devuelve un mensaje de error si no se encuentra el usuario con el ID dado
-    return jsonify({'mensaje': 'Usuario no encontrado'}), 404
+        # Actualiza el rol en la tabla de Acceso
+        Acceso.update(rol_id=rol.rol_id).where(
+            Acceso.usuario_id == data['user_id']).execute()
+
+        # Registra la actividad
+        RegistroActividades.registrar_actividades(
+            str(session['id']), "ACTUALIZAR",
+            f"SE ACTUALIZA POR USUARIO: {session['user']} - SE HA ACTUALIZADO USUARIO: {data['nombre']}"
+        )
+
+        flash("Usuario actualizado exitosamente", "success")
+
+        # Devuelve un mensaje de éxito
+        return jsonify({'mensaje': 'Datos guardados exitosamente'})
+    except Roles.DoesNotExist:
+        # Devuelve un mensaje de error si no se encuentra el rol
+        return jsonify({'mensaje': 'Rol no encontrado'}), 404
+    except Usuario.DoesNotExist:
+        # Devuelve un mensaje de error si no se encuentra el usuario con el ID dado
+        return jsonify({'mensaje': 'Usuario no encontrado'}), 404
 
 
 if __name__ == '__main__':

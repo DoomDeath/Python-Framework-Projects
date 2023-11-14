@@ -28,6 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const tipoUsuarioLabel = row.querySelector(".tipo-usuario-label");
             const tipoUsuarioSelect = row.querySelector(".tipo-usuario-select");
 
+            // Agregar un indicador de carga (puedes personalizarlo según tus necesidades)
+            const loadingIndicator = document.createElement("div");
+            loadingIndicator.className = "loading-indicator";
+            document.body.appendChild(loadingIndicator);
+
             const dataToSave = {};
 
             cells.forEach(cell => {
@@ -39,9 +44,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 if (fieldName === "TipoUsuario") {
-                    const tipoUsuarioSelectId = `tipo-usuario-select-${loop.index}`;
-                    const tipoUsuarioSelect = row.querySelector(`#${tipoUsuarioSelectId}`);
                     if (cell.getAttribute("contenteditable") === "false") {
+
                         cell.setAttribute("contenteditable", "true");
                         tipoUsuarioLabel.style.display = "none";
                         tipoUsuarioSelect.style.display = "block";
@@ -49,9 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         cell.setAttribute("contenteditable", "false");
                         tipoUsuarioLabel.style.display = "block";
                         tipoUsuarioSelect.style.display = "none";
-                        // Obtener el valor seleccionado del combobox y agregarlo a dataToSave
-                        const selectedValue = tipoUsuarioSelect.value;
-                        console.log("Seleccionado:", selectedValue);
 
                     }
                 }
@@ -62,6 +63,12 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Antes de la solicitud AJAX:", dataToSave);
 
             if (button.textContent === "Guardar") {
+
+                const seleccion = seleccionarOpcion(tipoUsuarioSelect);
+                dataToSave['TipoUsuario'] = seleccion;
+                tipoUsuarioLabel.textContent = seleccion;
+                // Mostrar el indicador de carga antes de la solicitud AJAX
+                loadingIndicator.style.display = "block";
                 fetch('/updateData', {
                     method: 'POST',
                     headers: {
@@ -76,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     .catch(error => {
                         console.error("Error al guardar los datos:", error);
                     });
-
+                    
                 cells.forEach(cell => {
                     cell.setAttribute("contenteditable", "false");
                 });
@@ -98,3 +105,18 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+
+function seleccionarOpcion(selectElement) {
+    // Obtiene el valor seleccionado
+    var selectedValue = selectElement.value;
+
+    // Obtiene el texto de la opción seleccionada
+    var selectedText = selectElement.options[selectElement.selectedIndex].text;
+
+    // Imprime los valores seleccionados (puedes realizar otras acciones aquí)
+    console.log("Valor seleccionado: " + selectedValue);
+    console.log("Texto seleccionado: " + selectedText);
+
+    return selectedText
+}

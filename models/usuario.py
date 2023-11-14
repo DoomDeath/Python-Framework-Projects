@@ -16,7 +16,7 @@ class Usuario(UserMixin, Model):
     contrasena = CharField(max_length=255)
     tipo_usuario = CharField(max_length=50)
     fecha_registro = DateField(constraints=[SQL('DEFAULT CURRENT_DATE')])
-    fecha_actualizacion = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
+    fecha_actualizacion = DateField()
 
     class Meta:
         database = db
