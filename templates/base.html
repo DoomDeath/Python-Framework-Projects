@@ -19,7 +19,7 @@
                     <div class="dropdown-content">
                         
                         <a href="/panel">Dashboard</a>
-                        <a href="/table_user">Configurar cuenta</a>
+                        <a href="/table_user">Gestion de usuarios</a>
                         <a href="/opcion3">Opción 3</a>
                     </div>
                 </div>
@@ -35,6 +35,7 @@
     <main>
         {% block content %}{% endblock %}
         <script src="{{ url_for('static', filename='main.js') }}"></script>
+        <script src="{{ url_for('static', filename='login.js') }}"></script>
 
     </main>
 

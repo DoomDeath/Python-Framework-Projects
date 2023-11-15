@@ -1,43 +1,10 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<main>
-    <div class="content-container">
-        <header>
-            <h1>Bienvenido a Nuestra Plataforma de Gestión de Discos de Música</h1>
-        </header>
-        <section>
-            <p>¡Gracias por visitar nuestro sitio web dedicado a brindar soluciones de alta calidad en la gestión de
-                discos de música!</p>
-            <p>Explora nuestras páginas para descubrir más sobre los servicios y productos que ofrecemos.</p>
-            <p>Sumérgete en el mundo de la música y descubre cómo nuestra plataforma puede mejorar tu experiencia
-                musical.</p>
-        </section>
-    </div>
-</main>
-<main>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div id="flash-messages">
-        {% for message in messages %}
-        <div class="alert alert-success">{{ message }}</div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
-    <div class="content-container">
-        <h2>Iniciar Sesión</h2>
-        <form method="POST" action="/login">
-            <label for="username">Nombre de usuario:</label>
-            <input type="text" id="username" name="username" required><br><br>
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required><br><br>
-            <input type="submit" value="Iniciar Sesión">
-        </form>
-        <p>No tienes una cuenta? <a href="/formulario_registro">Regístrate</a></p>
-    </div>
-
-
-</main>
-
+{% include 'header_base.html' %}
+<div id="login">
+    {% include 'login.html' %}
+</div>
+<div id="registro" style="display: none;">
+    {% include 'formulario_registro.html' %}
+</div>
 {% endblock %}

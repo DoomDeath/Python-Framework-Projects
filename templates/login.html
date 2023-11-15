@@ -1,0 +1,24 @@
+{% block content %}
+<main>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div id="flash-messages">
+        {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="content-container">
+        <h2>Iniciar Sesión</h2>
+        <form method="POST" action="/login">
+            <label for="username">Nombre de usuario:</label>
+            <input type="text" id="username" name="username" required><br><br>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <input type="submit" value="Iniciar Sesión">
+        </form>
+        <p>No tienes una cuenta? <a href="#" onclick="mostrarRegistro()">Regístrate</a></p>
+    </div>
+</main>
+{% endblock %}

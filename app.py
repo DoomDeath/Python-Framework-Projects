@@ -1,4 +1,3 @@
-
 import datetime
 from flask import Flask, flash, render_template, redirect, url_for, request, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required
@@ -31,6 +30,14 @@ def tabla_usuarios():
     for role in roles:
         print(role.nombre_rol)
     return render_template('tabla_usuarios.html', usuarios=usuarios, roles=roles)
+
+
+@app.route('/movimietos_usuario')
+@login_required
+def movimientos_usuarios():
+    movimientos = RegistroActividades.buscar_registros('2023-11-10', 'fecha_hora')
+    return render_template('registro_movimientos.html', movimientos=movimientos)
+
 
 
 # Función para cargar un usuario por ID
@@ -77,6 +84,40 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route("/usuario_cliente", methods=['POST'])
+def registrar_usuario_cliente():
+    try:
+        nombre = request.form["nombre"]
+        correo = request.form["correo"]
+        contrasena = request.form["contrasena"]
+        tipo_usuario = 'User'
+
+        if not Usuario.select().where(
+                (Usuario.nombre_usuario == nombre) | (Usuario.correo_electronico == correo)).exists():
+            # Crear un nuevo usuario y acceso en la base de datos
+            nuevo_usuario = Usuario.create(
+                nombre_usuario=nombre,
+                correo_electronico=correo,
+                contrasena=contrasena,
+                tipo_usuario=tipo_usuario
+            )
+
+            rol_id = Roles.select(Roles.rol_id).where(Roles.nombre_rol == tipo_usuario).scalar()
+
+            nuevo_acceso = Acceso.create(
+                usuario_id=nuevo_usuario,
+                rol_id=int(rol_id)
+            )
+
+            flash('Registro exitoso', 'success')  # Flash success message
+        else:
+            flash('Usuario o correo ya existen', 'error')  # Flash error message for duplicate entry
+    except IntegrityError as e:
+        flash('Error al registrar el usuario: {}'.format(str(e)), 'error')  # Flash error message for integrity error
+
+    return render_template('index.html')
+
+
 @app.route('/')
 def index():
     return render_template('index.html', current_page='/')
@@ -106,7 +147,7 @@ def delete_element(index):
             for acceso in accesos_a_eliminar:
                 acceso.delete_instance()
 
-             # Ahora puedes eliminar el usuario
+            # Ahora puedes eliminar el usuario
             usuario_a_eliminar = Usuario.get(Usuario.id == index)
             usuario_a_eliminar.delete_instance()
 

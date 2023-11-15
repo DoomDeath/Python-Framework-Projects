@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<main>
+    <h1>Registro de Movimientos de Usuarios</h1>
+    <!-- Barra de búsqueda -->
+    <input type="text" id="searchInput" placeholder="Buscar por usuario...">
+
+    <!-- Tabla de registros -->
+    <table>
+        <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Accion</th>
+            <th>Fecha</th>
+            <th>Descripción</th>
+        </tr>
+        </thead>
+        <tbody id="movementsTable">
+        {% for movimiento in movimientos %}
+        <tr>
+            <td>{{ movimiento.nombre_usuario }}</td>
+            <td>{{ movimiento.accion }}</td>
+            <td>{{ movimiento.fecha_hora }}</td>
+            <td>{{ movimiento.descripcion }}</td>
+        </tr>
+        {% endfor %}
+        <!-- Los registros se llenarán dinámicamente aquí -->
+        </tbody>
+    </table>
+</main>
+{% endblock %}
