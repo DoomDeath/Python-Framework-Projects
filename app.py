@@ -32,12 +32,9 @@ def tabla_usuarios():
     return render_template('tabla_usuarios.html', usuarios=usuarios, roles=roles)
 
 
-@app.route('/movimietos_usuario')
-@login_required
-def movimientos_usuarios():
-    movimientos = RegistroActividades.buscar_registros('2023-11-10', 'fecha_hora')
+def movimientos_usuarios(buscqueda, tipo_busqueda):
+    movimientos = RegistroActividades.buscar_registros('e', 'accion')
     return render_template('registro_movimientos.html', movimientos=movimientos)
-
 
 
 # Función para cargar un usuario por ID
