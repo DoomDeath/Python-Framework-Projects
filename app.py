@@ -5,7 +5,8 @@ from psycopg2 import IntegrityError
 
 from models.usuario import Acceso, Usuario, Roles
 from models.utilDB import probar_connecion
-from utils.utils import RegistroActividades
+from utils.utils import RegistroActividades, ValidadorUsuario
+from utils.utils import RestriccionUsuarios
 
 app = Flask(__name__)
 
@@ -14,6 +15,8 @@ app.secret_key = '12345678'  # Cambia esto a una clave secreta segura
 # Configura el LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+restriccion_usuarios = RestriccionUsuarios()
 
 
 @app.context_processor
@@ -24,6 +27,7 @@ def utility_processor():
 
 @app.route('/table_user')
 @login_required
+@restriccion_usuarios.admin_required
 def tabla_usuarios():
     usuarios = Usuario.select()
     roles = Roles.select()
@@ -32,8 +36,23 @@ def tabla_usuarios():
     return render_template('tabla_usuarios.html', usuarios=usuarios, roles=roles)
 
 
-def movimientos_usuarios(buscqueda, tipo_busqueda):
-    movimientos = RegistroActividades.buscar_registros('e', 'accion')
+@app.route('/movimietos_usuario')
+@login_required
+@restriccion_usuarios.admin_required
+def movimientos_usuarios():
+    return render_template('registro_movimientos.html')
+
+
+
+    #REVISAR SI QUEDA COMO ENDPOINT
+
+@app.route('/movimietos_usuario_busqueda', methods=["POST"])
+@login_required
+@restriccion_usuarios.admin_required
+def movimientos_usuarios_busqueda():
+    busqueda = request.form["busqueda"]
+    criterio = request.form.get("criterio", '')
+    movimientos = RegistroActividades.buscar_registros(busqueda, criterio)
     return render_template('registro_movimientos.html', movimientos=movimientos)
 
 
@@ -67,6 +86,7 @@ def login():
             session['id'] = user.id
             session['logged'] = True
             session['user'] = username
+            session['tipo'] = user.tipo_usuario
             current_page = ''
             return render_template('panel.html', current_page=current_page)
     flash("Error al iniciar sesión. Verifica tus credenciales e inténtalo de nuevo.", "error")
@@ -85,8 +105,14 @@ def logout():
 def registrar_usuario_cliente():
     try:
         nombre = request.form["nombre"]
+        if not ValidadorUsuario.validar_usuario(nombre):
+            flash('El nombre de usuario no es válido. Debe tener entre 3 y 20 caracteres y contener solo letras y números (sin espacios).', 'error')
+            return redirect(url_for('index'))
         correo = request.form["correo"]
         contrasena = request.form["contrasena"]
+        if not ValidadorUsuario.validar_contrasena(contrasena):
+            # Si la contraseña no cumple con los criterios, el mensaje de error ya fue flash y ahora rediriges a la página principal
+            return redirect(url_for('index'))
         tipo_usuario = 'User'
 
         if not Usuario.select().where(
@@ -99,7 +125,8 @@ def registrar_usuario_cliente():
                 tipo_usuario=tipo_usuario
             )
 
-            rol_id = Roles.select(Roles.rol_id).where(Roles.nombre_rol == tipo_usuario).scalar()
+            rol_id = Roles.select(Roles.rol_id).where(
+                Roles.nombre_rol == tipo_usuario).scalar()
 
             nuevo_acceso = Acceso.create(
                 usuario_id=nuevo_usuario,
@@ -108,9 +135,11 @@ def registrar_usuario_cliente():
 
             flash('Registro exitoso', 'success')  # Flash success message
         else:
-            flash('Usuario o correo ya existen', 'error')  # Flash error message for duplicate entry
+            # Flash error message for duplicate entry
+            flash('Usuario o correo ya existen', 'error')
     except IntegrityError as e:
-        flash('Error al registrar el usuario: {}'.format(str(e)), 'error')  # Flash error message for integrity error
+        flash('Error al registrar el usuario: {}'.format(str(e)),
+              'error')  # Flash error message for integrity error
 
     return render_template('index.html')
 
@@ -134,6 +163,7 @@ def panel():
 
 @app.route('/delete/<int:index>', methods=['POST'])
 @login_required
+@restriccion_usuarios.admin_required
 def delete_element(index):
     if request.method == 'POST':
         try:
@@ -165,6 +195,7 @@ def delete_element(index):
 
 @app.route('/insertar', methods=['POST'])
 @login_required
+@restriccion_usuarios.admin_required
 def insertar_usuario():
     if request.method == 'POST':
         nombre = request.form["nombre"]
@@ -206,6 +237,7 @@ def insertar_usuario():
 
 @app.route('/updateData', methods=['POST'])
 @login_required
+@restriccion_usuarios.admin_required
 def editar_datos():
     # Obtener los datos del cuerpo de la solicitud en formato JSON
     data = request.get_json()

@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-    <main>
-        <h1>Registro de Movimientos de Usuarios</h1>
-        <!-- Barra de búsqueda -->
-        <input type="text" id="searchInput" placeholder="Buscar por usuario...">
-
+<main>
+    <h1>Registro de Movimientos de Usuarios</h1>
+    
+    <!-- Barra de búsqueda -->
+    <form id="searchForm" method="POST" action="/movimientos_usuario_busqueda">
+        <input type="text" id="searchInput" name="busqueda" placeholder="Buscar por usuario...">
         <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: center;">
             <label for="accionCheckbox">Accion</label>
             <input type="checkbox" id="accionCheckbox" name="criterio" value="accion">
@@ -16,31 +17,33 @@
             <input type="checkbox" id="fechaCheckbox" name="criterio" value="fecha">
 
             <!-- Botón de búsqueda -->
-            <!-- Si decides mantener el botón, puedes usarlo para hacer la búsqueda manualmente -->
-            <!-- <button onclick="buscarRegistros()">Buscar</button> -->
-        </div>
 
-        <!-- Tabla de registros -->
-        <table>
-            <thead>
+            <button type="submit" value="Buscar">Buscar</button>
+        </div>
+    </form>
+
+
+    <!-- Tabla de registros -->
+    <table>
+        <thead>
             <tr>
                 <th>Usuario</th>
                 <th>Accion</th>
                 <th>Fecha</th>
                 <th>Descripción</th>
             </tr>
-            </thead>
-            <tbody id="movementsTable">
+        </thead>
+        <tbody id="movementsTable">
             {% for movimiento in movimientos %}
-                <tr>
-                    <td>{{ movimiento.nombre_usuario }}</td>
-                    <td>{{ movimiento.accion }}</td>
-                    <td>{{ movimiento.fecha_hora }}</td>
-                    <td>{{ movimiento.descripcion }}</td>
-                </tr>
+            <tr>
+                <td>{{ movimiento.nombre_usuario }}</td>
+                <td>{{ movimiento.accion }}</td>
+                <td>{{ movimiento.fecha_hora }}</td>
+                <td>{{ movimiento.descripcion }}</td>
+            </tr>
             {% endfor %}
             <!-- Los registros se llenarán dinámicamente aquí -->
-            </tbody>
-        </table>
-    </main>
+        </tbody>
+    </table>
+</main>
 {% endblock %}

@@ -15,12 +15,14 @@
                 </div>
 
                 <!-- Widget 2 -->
+                {% if session['tipo'] == 'Admin' %}
                 <div class="widget">
                     <h3>Gestión de Usuarios</h3>
                     <p>Administra las configuraciones de tu cuenta de usuario.</p>
                     <p><a href="/table_user">Configuración de Usuarios</a></p>
                     <p><a href="/movimietos_usuario">Registro de Movimientos</a></p>
                 </div>
+                {% endif %}
             </div>
         </div>
     </main>

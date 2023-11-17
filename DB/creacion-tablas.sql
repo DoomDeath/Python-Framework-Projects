@@ -36,3 +36,29 @@ INSERT INTO asignacion_perfiles (usuario_id, perfil_id) VALUES (1, 1);
 
 -- Asignar el perfil de "Moderador" al usuario 2
 INSERT INTO asignacion_perfiles (usuario_id, perfil_id) VALUES (2, 2);
+
+
+
+
+-- Active: 1699492089251@@dpg-cl6165c72pts73fqdbug-a.oregon-postgres.render.com@5432@dbdi@public
+DROP FUNCTION buscar_registros;
+CREATE OR REPLACE FUNCTION public.buscar_registros(termino text, columna_busqueda text)
+ RETURNS TABLE(registro_id integer, usuario_id integer, nombre_usuario character varying, accion character varying, fecha_hora timestamp with time zone, descripcion text)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    EXECUTE
+    'SELECT
+        r.registro_id,
+        r.usuario_id,
+        COALESCE(u.nombre_usuario, ''Usuario Eliminado'') AS nombre_usuario,
+        r.accion,
+        r.fecha_hora,
+        r.descripcion
+     FROM registro_de_actividades r
+     LEFT JOIN usuarios u ON CAST(r.usuario_id AS INTEGER) = u.usuario_id
+     WHERE LOWER(' || columna_busqueda || ') ILIKE ''%'' || LOWER($1) || ''%'''
+    USING termino;
+END;
+$function$

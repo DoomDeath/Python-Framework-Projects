@@ -4,8 +4,9 @@
 <head>
     <meta charset="utf-8">
     <title>Inicio Session</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='alert.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='spinner.css') }}">
 
 </head>
 
@@ -14,13 +15,12 @@
     <header>
         <nav>
             <div style="display: flex; justify-content: space-between;">
-                <span>Bienvenido, {{ session['user'] }}</span>
+                <span>Bienvenid@, {{ session['user'] }}</span>
                 <div class="dropdown">
                     <div class="dropdown-content">
-                        
+
                         <a href="/panel">Dashboard</a>
-                        <a href="/table_user">Gestion de usuarios</a>
-                        <a href="/opcion3">Opción 3</a>
+
                     </div>
                 </div>
                 <form method="post" action="{{ url_for('logout') }}">
@@ -34,9 +34,12 @@
 
     <main>
         {% block content %}{% endblock %}
+        <!-- Spinner de carga -->
+        
         <script src="{{ url_for('static', filename='main.js') }}"></script>
         <script src="{{ url_for('static', filename='login.js') }}"></script>
         <script src="{{ url_for('static', filename='buscador_actividades.js') }}"></script>
+        <script src="{{ url_for('static', filename='spinner.js') }}"></script>
 
     </main>
 
