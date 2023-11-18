@@ -24,7 +24,7 @@ class RestriccionUsuarios():
 class RegistroActividades():
 
     def registrar_actividades(id, accion, descripcion):
-        RegistroActividades.create(
+        RegistroDeActividades.create(
             usuario=int(id),
             accion=accion,
             descripcion=descripcion

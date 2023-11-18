@@ -4,7 +4,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required
 from psycopg2 import IntegrityError
 
 from models.usuario import Acceso, Usuario, Roles
-from models.utilDB import probar_connecion
+from utils.bd_utils import probar_connecion
 from utils.utils import RegistroActividades, ValidadorUsuario
 from utils.utils import RestriccionUsuarios
 
@@ -46,7 +46,7 @@ def movimientos_usuarios():
 
     #REVISAR SI QUEDA COMO ENDPOINT
 
-@app.route('/movimietos_usuario_busqueda', methods=["POST"])
+@app.route('/movimientos_usuario_busqueda', methods=["POST"])
 @login_required
 @restriccion_usuarios.admin_required
 def movimientos_usuarios_busqueda():
