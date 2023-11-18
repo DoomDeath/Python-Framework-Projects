@@ -72,24 +72,29 @@ def load_user(user_id):
 def login():
     current_page = 'index'
 
-    print(probar_connecion())
+    try:
+        print(probar_connecion())  # Supongo que 'probar_connecion()' maneja la conexión a la base de datos
 
-    if request.method == "POST":
-        username = request.form["username"].strip()
-        password = request.form["password"].strip()
+        if request.method == "POST":
+            username = request.form["username"].strip()
+            password = request.form["password"].strip()
 
-        user = Usuario.get_or_none(
-            (Usuario.nombre_usuario == username) & (Usuario.contrasena == password))
+            user = Usuario.get_or_none(
+                (Usuario.nombre_usuario == username) & (Usuario.contrasena == password))
 
-        if user:
-            login_user(user)
-            session['id'] = user.id
-            session['logged'] = True
-            session['user'] = username
-            session['tipo'] = user.tipo_usuario
-            current_page = ''
-            return render_template('panel.html', current_page=current_page)
-    flash("Error al iniciar sesión. Verifica tus credenciales e inténtalo de nuevo.", "error")
+            if user:
+                login_user(user)
+                session['id'] = user.id
+                session['logged'] = True
+                session['user'] = username
+                session['tipo'] = user.tipo_usuario
+                current_page = ''
+                return render_template('panel.html', current_page=current_page)
+
+        flash("Error al iniciar sesión. Verifica tus credenciales e inténtalo de nuevo.", "error")
+    except Exception as e:
+        flash(f"Error de conexión a la base de datos: {str(e)}", "error")
+
     return render_template("index.html", current_page=current_page)
 
 

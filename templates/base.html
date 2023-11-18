@@ -7,10 +7,16 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='alert.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='spinner.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/overlay.css') }}">
+
 
 </head>
 
 <body>
+    <div id="overlay">
+        <p>Cargando...</p>
+    </div>
+    
     {% if current_page != 'index' and current_page != '/' %}
     <header>
         <nav>
@@ -23,8 +29,9 @@
 
                     </div>
                 </div>
-                <form method="post" action="{{ url_for('logout') }}">
-                    <button type="submit" style="background-color: #512121;" >Cerrar Sesión</button>
+                <form id="form_logout" method="post" action="{{ url_for('logout') }}">
+                    <button id="id_logout" type="submit" style="background-color: #512121;"
+                        onclick="enviarFormulario('id_logout', 'form_logout')">Cerrar Sesión</button>
                 </form>
             </div>
         </nav>
@@ -32,17 +39,15 @@
     {% endif %}
 
 
-    <main>
+    
         {% block content %}{% endblock %}
-        <!-- Spinner de carga -->
-        
         <script src="{{ url_for('static', filename='main.js') }}"></script>
         <script src="{{ url_for('static', filename='login.js') }}"></script>
         <script src="{{ url_for('static', filename='buscador_actividades.js') }}"></script>
         <script src="{{ url_for('static', filename='spinner.js') }}"></script>
         <script src="{{ url_for('static', filename='js/bloquear_boton.js') }}"></script>
 
-    </main>
+    
 
     <footer>
         <p>&copy; {{ fecha_actual }} - Derechos reservados - Gustavo Burgos</p>
