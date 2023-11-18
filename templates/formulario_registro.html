@@ -1,19 +1,21 @@
 {% block content %}
 <main>
-<h1>Formulario de Registro</h1>
-<form action="/usuario_cliente" method="post">
+    <h1>Formulario de Registro</h1>
+    <form id="formRegisterUser" action="/usuario_cliente" method="post">
 
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
 
-    <label for="correo">Correo Electrónico:</label>
-    <input type="email" id="correo" name="correo" required>
+        <label for="correo">Correo Electrónico:</label>
+        <input type="email" id="correo" name="correo" required>
 
-    <label for="contrasena">Contraseña:</label>
-    <input type="password" id="contrasena" name="contrasena" required>
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" name="contrasena" required>
 
-    <input type="submit" value="Registrarse">
-    <button type="submit" href="#" onclick="ocultarRegistro()">Cancelar</button>
-</form>
+        <input id="buttonSend" type="submit" value="Registrarse"
+               onclick='enviarFormulario("buttonSend", "formCreateUser")'>
+        <button type="submit" href="#" onclick="ocultarRegistro()">Cancelar</button>
+
+    </form>
 </main>
 {% endblock %}
