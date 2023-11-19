@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<main>
+<h1>Registro Titulos</h1>
+
+<form method="post" action="/guardar_disco">
+    <!-- Disco ID no es editable ya que es una clave primaria generada automáticamente -->
+    <label for="nombre_disco">Nombre del Disco:</label>
+    <input type="text" id="nombre_disco" name="nombre_disco" required>
+
+    <label for="artista">Artista:</label>
+    <input type="text" id="artista" name="artista">
+
+    <label for="anio_lanzamiento">Año de Lanzamiento:</label>
+    <input type="number" id="anio_lanzamiento" name="anio_lanzamiento">
+
+    <label for="genero">Género:</label>
+    <input type="text" id="genero" name="genero">
+
+    <label for="formato">Formato:</label>
+    <input type="text" id="formato" name="formato">
+
+    <!-- Fecha de registro se establecerá automáticamente en el servidor -->
+    <!-- Fecha de actualización también se establecerá automáticamente en el servidor -->
+
+    <button type="submit">Guardar Disco</button>
+</form>
+</main>
+{% endblock %}

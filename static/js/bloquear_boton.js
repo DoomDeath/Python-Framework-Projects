@@ -1,33 +1,29 @@
 function enviarFormulario(idButton, idForm) {
+    // Mostrar el overlay al hacer clic en el botón
+    mostrarOverlay();
 
-     // Mostrar el overlay al hacer clic en el botón
-     mostrarOverlay();
     // Deshabilitar el botón al hacer clic
     var boton = document.getElementById(idButton);
     boton.disabled = true;
 
-   
-
     if (idButton === 'id_logout') {
-        // El código dentro de este bloque se ejecutará si la condición es verdadera
-        boton.innerText = 'Cerrando Session...';
+        boton.innerText = 'Cerrando Sesión...';
     } else if (idButton === 'button_search') {
-        boton.style.backgroundColor = '#CCCCCC'; // Puedes ajustar el color según tus necesidades
+        boton.style.backgroundColor = '#CCCCCC';
         boton.innerText = 'Buscando...';
     } else {
-        boton.style.backgroundColor = '#CCCCCC'; // Puedes ajustar el color según tus necesidades
+        boton.style.backgroundColor = '#CCCCCC';
         boton.innerText = 'Cargando...';
     }
 
-
-    // Enviar el formulario
+    // Retornar false si la validación no pasa para evitar el envío del formulario
     var formulario = document.getElementById(idForm);
-    formulario.submit();
-
+    if (!formulario.checkValidity()) {
+        return false;
+    }
 
     // Opcionalmente, puedes mostrar un mensaje de espera o realizar otras acciones necesarias
 }
-
 
 function mostrarOverlay() {
     document.getElementById('overlay').style.display = 'flex';

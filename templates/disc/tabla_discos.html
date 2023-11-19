@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Registros de Discos</h1>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre del Disco</th>
+            <th>Artista</th>
+            <th>Año de Lanzamiento</th>
+            <th>Género</th>
+            <th>Formato</th>
+            <th>Fecha de Registro</th>
+            <th>Fecha de Actualización</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for registro in registros %}
+        <tr>
+            <td>{{ registro.disco_id }}</td>
+            <td>{{ registro.nombre_disco }}</td>
+            <td>{{ registro.artista }}</td>
+            <td>{{ registro.anio_lanzamiento }}</td>
+            <td>{{ registro.genero }}</td>
+            <td>{{ registro.formato }}</td>
+            <td>{{ registro.fecha_registro }}</td>
+            <td>{{ registro.fecha_actualizacion }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

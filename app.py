@@ -25,6 +25,16 @@ def utility_processor():
     return {'fecha_actual': fecha_actual}
 
 
+
+
+@app.route('/ingreso_disco')
+@login_required
+def ingreso_disco():
+    return render_template('disc/ingreso_disco.html')
+
+
+
+
 @app.route('/table_user')
 @login_required
 @restriccion_usuarios.admin_required

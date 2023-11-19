@@ -16,7 +16,7 @@
     <div id="overlay">
         <p>Cargando...</p>
     </div>
-    
+
     {% if current_page != 'index' and current_page != '/' %}
     <header>
         <nav>
@@ -29,9 +29,9 @@
 
                     </div>
                 </div>
-                <form id="form_logout" method="post" action="{{ url_for('logout') }}">
-                    <button id="id_logout" type="submit" style="background-color: #512121;"
-                        onclick="enviarFormulario('id_logout', 'form_logout')">Cerrar Sesión</button>
+                <form id="form_logout" method="post" action="{{ url_for('logout') }}"
+                    onsubmit="return enviarFormulario('id_logout', 'form_logout')">
+                    <button id="id_logout" type="submit" style="background-color: #512121;">Cerrar Sesión</button>
                 </form>
             </div>
         </nav>
@@ -39,15 +39,15 @@
     {% endif %}
 
 
-    
-        {% block content %}{% endblock %}
-        <script src="{{ url_for('static', filename='main.js') }}"></script>
-        <script src="{{ url_for('static', filename='login.js') }}"></script>
-        <script src="{{ url_for('static', filename='buscador_actividades.js') }}"></script>
-        <script src="{{ url_for('static', filename='spinner.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/bloquear_boton.js') }}"></script>
 
-    
+    {% block content %}{% endblock %}
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="{{ url_for('static', filename='login.js') }}"></script>
+    <script src="{{ url_for('static', filename='buscador_actividades.js') }}"></script>
+    <script src="{{ url_for('static', filename='spinner.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bloquear_boton.js') }}"></script>
+
+
 
     <footer>
         <p>&copy; {{ fecha_actual }} - Derechos reservados - Gustavo Burgos</p>

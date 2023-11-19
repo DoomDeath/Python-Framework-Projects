@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 <main id="formularioCrearUsuario" style="display: none;">
-    <form id="formCreateUser" action="{{ url_for('insertar_usuario') }}" method="POST">
+    <form id="formCreateUser" action="{{ url_for('insertar_usuario') }}" method="POST"
+        onsubmit="return enviarFormulario('buttonSend', 'formCreateUser')">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" required>
 
@@ -19,7 +20,7 @@
         </select>
 
         <br>
-        <button id="buttonSend" type="submit" value="Crear Registro" onclick='enviarFormulario("buttonSend", "formCreateUser")'>Crear Registro</button>
+        <button id="buttonSend" type="submit" value="Crear Registro">Crear Registro</button>
         <input type="submit" id="cancelar" value="Cancelar">
         <br>
     </form>
@@ -43,50 +44,50 @@
 
         <table>
             <thead>
-            <tr>
-                <th>N°</th>
-                <th>Nombre</th>
-                <th>Correo Electrónico</th>
-                <th>Contraseña</th>
-                <th>Tipo de usuario</th>
-                <th>Fecha de registro</th>
-                <th>Fecha de Actualizacion</th>
-                <th>Acciones</th>
-            </tr>
+                <tr>
+                    <th>N°</th>
+                    <th>Nombre</th>
+                    <th>Correo Electrónico</th>
+                    <th>Contraseña</th>
+                    <th>Tipo de usuario</th>
+                    <th>Fecha de registro</th>
+                    <th>Fecha de Actualizacion</th>
+                    <th>Acciones</th>
+                </tr>
             </thead>
             <tbody>
-            {% for usuario in usuarios %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td data-user-id="{{ usuario.id }}" contenteditable="false" class="editable"
-                    data-field-name="nombre">{{ usuario.nombre_usuario }}
-                </td>
-                <td contenteditable="false" class="editable" data-field-name="correo">{{ usuario.correo_electronico
-                    }}
-                </td>
-                <td contenteditable="false" class="editable" data-field-name="Contrasena">{{ usuario.contrasena }}
-                </td>
-                <td contenteditable="false" class="editable" data-field-name="TipoUsuario">
-                    <span class="tipo-usuario-label">{{ usuario.tipo_usuario }}</span>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td data-user-id="{{ usuario.id }}" contenteditable="false" class="editable"
+                        data-field-name="nombre">{{ usuario.nombre_usuario }}
+                    </td>
+                    <td contenteditable="false" class="editable" data-field-name="correo">{{ usuario.correo_electronico
+                        }}
+                    </td>
+                    <td contenteditable="false" class="editable" data-field-name="Contrasena">{{ usuario.contrasena }}
+                    </td>
+                    <td contenteditable="false" class="editable" data-field-name="TipoUsuario">
+                        <span class="tipo-usuario-label">{{ usuario.tipo_usuario }}</span>
 
-                    <select class="tipo-usuario-select" style="display: none;"
+                        <select class="tipo-usuario-select" style="display: none;"
                             id="tipo-usuario-select-{{ loop.index }}">
-                        {% for role in roles %}
-                        <option value="{{ role.id }}">{{ role.nombre_rol }}</option>
-                        {% endfor %}
-                    </select>
+                            {% for role in roles %}
+                            <option value="{{ role.id }}">{{ role.nombre_rol }}</option>
+                            {% endfor %}
+                        </select>
 
-                </td>
-                <td>{{ usuario.fecha_registro }}</td>
-                <td>{{ usuario.fecha_actualizacion }}</td>
-                <td style="display: flex; justify-content: space-evenly;">
-                    <button class="edit-button">Editar</button>
-                    <form action="{{ url_for('delete_element', index=usuario.id) }}" method="POST">
-                        <input type="submit" value="Eliminar">
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
+                    </td>
+                    <td>{{ usuario.fecha_registro }}</td>
+                    <td>{{ usuario.fecha_actualizacion }}</td>
+                    <td style="display: flex; justify-content: space-evenly;">
+                        <button class="edit-button">Editar</button>
+                        <form action="{{ url_for('delete_element', index=usuario.id) }}" method="POST">
+                            <input type="submit" value="Eliminar">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
 
