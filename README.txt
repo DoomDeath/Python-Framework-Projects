@@ -13,6 +13,7 @@ Asegúrate de tener una instancia de PostgreSQL disponible y utiliza la siguient
 - **Contraseña:** hfB3VFoAb5Q2GVW1jQgPYiA6xuqALu8f
 
 si tienes problemas con driver postgres ejecuta este comando: pip install psycopg2-binary 
+pero antes tiene que abrir requirements.txt comentar #psycopg2==2.9.9
 
 ## Comandos Requeridos
 
