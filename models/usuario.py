@@ -33,9 +33,11 @@ class Disco(Model):
     formato = CharField(max_length=100, null=True)
     fecha_registro = DateField(constraints=[SQL('DEFAULT CURRENT_DATE')])
     fecha_actualizacion = DateTimeField(constraints=[SQL('DEFAULT CURRENT_TIMESTAMP')])
+    url_imagen = CharField(max_length=255, null=True)  # Nueva columna
 
     class Meta:
         database = db
+        db_table = 'discos'
 
 
 # Definición del modelo Categoría
@@ -46,6 +48,7 @@ class Categoria(Model):
 
     class Meta:
         database = db
+        db_table = 'categorias'
 
 
 # Definición del modelo Categorización

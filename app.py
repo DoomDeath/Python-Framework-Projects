@@ -6,7 +6,8 @@ from psycopg2 import IntegrityError
 import requests
 
 from config import GITHUB_USERNAME, GITHUB_REPO, GITHUB_TOKEN
-from models.usuario import Acceso, Usuario, Roles
+from models.usuario import Acceso, Usuario, Roles, Disco, Categorizacion, Categoria
+from services.discos_service import DiscoService
 from services.git_hub_service import GitHubService
 from utils.bd_utils import probar_connecion
 from utils.utils import RegistroActividades, ValidadorUsuario
@@ -33,6 +34,14 @@ def utility_processor():
 
 @app.route('/upload', methods=['POST'])
 def upload():
+
+    nombre_disco = request.form["nombre_disco"]
+    artista = request.form["artista"]
+    anio_lanzamiento = request.form["anio_lanzamiento"]
+    genero = request.form["genero"]
+    formato = request.form["formato"]
+    categoria=request.form["categorias"]
+
     if 'file' not in request.files:
         flash('No se seleccionó ningún archivo.')
         return redirect(request.url)
@@ -47,15 +56,18 @@ def upload():
     image_url = github_service.upload_image(file)
 
     if image_url:
-        # Aquí puedes almacenar el enlace de la imagen en tu base de datos o hacer lo que sea necesario.
+        nuevo_disco = DiscoService.guardar_disco(nombre_disco, artista, anio_lanzamiento, genero, formato, categoria, image_url)
         flash(f'Imagen subida exitosamente. URL: {image_url}')
+        flash(f'Se agrega disco exitosamente')
 
     return redirect(url_for('ingreso_disco'))
 
 @app.route('/ingreso_disco')
 @login_required
 def ingreso_disco():
-    return render_template('disc/ingreso_disco.html')
+
+    categorias = Categoria.select()
+    return render_template('disc/ingreso_disco.html', categorias=categorias)
 
 
 
