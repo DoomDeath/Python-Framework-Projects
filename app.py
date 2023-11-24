@@ -1,10 +1,9 @@
 import base64
 import datetime
-
-import requests
 from flask import Flask, flash, render_template, redirect, url_for, request, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required
 from psycopg2 import IntegrityError
+import requests
 
 from config import GITHUB_USERNAME, GITHUB_REPO, GITHUB_TOKEN
 from models.usuario import Acceso, Usuario, Roles
