@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
+<script src="{{ url_for('static', filename='js/validacion_imagenes.js') }}"></script>
 <main>
 <h1>Registro Titulos</h1>
 
-<form method="post" action="/guardar_disco">
-    <!-- Disco ID no es editable ya que es una clave primaria generada automáticamente -->
+<form id="guardar_disco_form" method="post" action="/upload" enctype="multipart/form-data">    
     <label for="nombre_disco">Nombre del Disco:</label>
     <input type="text" id="nombre_disco" name="nombre_disco" required>
 
@@ -20,13 +20,14 @@
     <label for="formato">Formato:</label>
     <input type="text" id="formato" name="formato">
 
-    <label for="imagen">Formato:</label>
-    <input type="image" id="imagen" name="imagen">
+    <label for="imagen">Imagen (JPEG):</label>
+    <input type="file" id="imagen" name="file" accept=".jpg, .jpeg" required>
 
     <!-- Fecha de registro se establecerá automáticamente en el servidor -->
     <!-- Fecha de actualización también se establecerá automáticamente en el servidor -->
 
     <button type="submit">Guardar Disco</button>
 </form>
+
 </main>
 {% endblock %}
