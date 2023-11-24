@@ -7,6 +7,7 @@ import requests
 
 from config import GITHUB_USERNAME, GITHUB_REPO, GITHUB_TOKEN
 from models.usuario import Acceso, Usuario, Roles
+from services.git_hub_service import GitHubService
 from utils.bd_utils import probar_connecion
 from utils.utils import RegistroActividades, ValidadorUsuario
 from utils.utils import RestriccionUsuarios
@@ -17,6 +18,8 @@ app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+# Crear una instancia del servicio de GitHub
+github_service = GitHubService(GITHUB_USERNAME, GITHUB_REPO, GITHUB_TOKEN)
 restriccion_usuarios = RestriccionUsuarios()
 
 app.config.from_pyfile('config.py')
@@ -40,29 +43,14 @@ def upload():
         flash('No se seleccionó ningún archivo.')
         return redirect(request.url)
 
-    try:
-        # Configura los parámetros para subir la imagen a GitHub
-        url = f'https://api.github.com/repos/{GITHUB_USERNAME}/{GITHUB_REPO}/contents/{file.filename}'
-        headers = {'Authorization': f'token {GITHUB_TOKEN}'}
-        data = {
-            'message': 'Añadir imagen',
-            'content': base64.b64encode(file.read()).decode('utf-8')
-        }
-        response = requests.put(url, headers=headers, json=data)
+    # Utilizar el servicio de GitHub para subir la imagen
+    image_url = github_service.upload_image(file)
 
-        if response.status_code == 201:
-            # Obtiene la URL de la imagen subida
-            image_url = response.json()['content']['html_url']
+    if image_url:
+        # Aquí puedes almacenar el enlace de la imagen en tu base de datos o hacer lo que sea necesario.
+        flash(f'Imagen subida exitosamente. URL: {image_url}')
 
-            # Aquí puedes almacenar el enlace de la imagen en tu base de datos o hacer lo que sea necesario.
-            flash(f'Imagen subida exitosamente. URL: {image_url}')
-        else:
-            flash(f'Error al subir la imagen. Respuesta de GitHub: {response.text}')
-
-    except Exception as e:
-        flash(f'Error al subir la imagen. Excepción: {str(e)}')
-
-    return redirect(url_for('index'))
+    return redirect(url_for('ingreso_disco'))
 
 @app.route('/ingreso_disco')
 @login_required

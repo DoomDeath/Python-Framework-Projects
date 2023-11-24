@@ -2,32 +2,42 @@
 {% block content %}
 <script src="{{ url_for('static', filename='js/validacion_imagenes.js') }}"></script>
 <main>
-<h1>Registro Titulos</h1>
+    <h1>Registro Titulos</h1>
 
-<form id="guardar_disco_form" method="post" action="/upload" enctype="multipart/form-data">    
-    <label for="nombre_disco">Nombre del Disco:</label>
-    <input type="text" id="nombre_disco" name="nombre_disco" required>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div id="flash-messages">
+        {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
 
-    <label for="artista">Artista:</label>
-    <input type="text" id="artista" name="artista">
+    <form id="guardar_disco_form" method="post" action="/upload" enctype="multipart/form-data">
+        <label for="nombre_disco">Nombre del Disco:</label>
+        <input type="text" id="nombre_disco" name="nombre_disco" required>
 
-    <label for="anio_lanzamiento">Año de Lanzamiento:</label>
-    <input type="number" id="anio_lanzamiento" name="anio_lanzamiento">
+        <label for="artista">Artista:</label>
+        <input type="text" id="artista" name="artista">
 
-    <label for="genero">Género:</label>
-    <input type="text" id="genero" name="genero">
+        <label for="anio_lanzamiento">Año de Lanzamiento:</label>
+        <input type="number" id="anio_lanzamiento" name="anio_lanzamiento">
 
-    <label for="formato">Formato:</label>
-    <input type="text" id="formato" name="formato">
+        <label for="genero">Género:</label>
+        <input type="text" id="genero" name="genero">
 
-    <label for="imagen">Imagen (JPEG):</label>
-    <input type="file" id="imagen" name="file" accept=".jpg, .jpeg" required>
+        <label for="formato">Formato:</label>
+        <input type="text" id="formato" name="formato">
 
-    <!-- Fecha de registro se establecerá automáticamente en el servidor -->
-    <!-- Fecha de actualización también se establecerá automáticamente en el servidor -->
+        <label for="imagen">Imagen (JPEG):</label>
+        <input type="file" id="imagen" name="file" accept=".jpg, .jpeg" required>
 
-    <button type="submit">Guardar Disco</button>
-</form>
+        <!-- Fecha de registro se establecerá automáticamente en el servidor -->
+        <!-- Fecha de actualización también se establecerá automáticamente en el servidor -->
+
+        <button type="submit">Guardar Disco</button>
+    </form>
 
 </main>
 {% endblock %}
