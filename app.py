@@ -9,6 +9,7 @@ from config import GITHUB_USERNAME, GITHUB_REPO, GITHUB_TOKEN
 from models.usuario import Acceso, Usuario, Roles, Disco, Categorizacion, Categoria
 from services.discos_service import DiscoService
 from services.git_hub_service import GitHubService
+from services.imgbb_service import subir_imagen
 from utils.bd_utils import probar_connecion
 from utils.utils import RegistroActividades, ValidadorUsuario
 from utils.utils import RestriccionUsuarios
@@ -51,9 +52,8 @@ def upload():
     if file.filename == '':
         flash('No se seleccionó ningún archivo.')
         return redirect(request.url)
-
-    # Utilizar el servicio de GitHub para subir la imagen
-    image_url = github_service.upload_image(file)
+    #se uriliza api imgbb
+    image_url = subir_imagen(file)
 
     if image_url:
         nuevo_disco = DiscoService.guardar_disco(nombre_disco, artista, anio_lanzamiento, genero, formato, categoria, image_url)
