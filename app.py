@@ -69,7 +69,14 @@ def ingreso_disco():
     categorias = Categoria.select()
     return render_template('disc/ingreso_disco.html', categorias=categorias)
 
-
+@app.route('/tabla_discos')
+@login_required
+def tabla_discos():
+    discos = Disco.select()
+    for disco in discos:
+        print(disco.nombre_disco)
+        print(disco.url_imagen)
+    return render_template('disc/tabla_discos.html', discos=discos)
 
 
 @app.route('/table_user')
