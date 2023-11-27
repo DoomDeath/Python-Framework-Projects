@@ -8,13 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
     mostrarFormulario.addEventListener("click", function () {
         mostrarFormulario.style.display = "none";
         formularioCrearUsuario.style.display = "block";
-        cerrarFormulario.style.display = "none";
+        // cerrarFormulario.style.display = "none";
     });
 
     cancelar.addEventListener("click", function () {
         mostrarFormulario.style.display = "block";
         formularioCrearUsuario.style.display = "none";
-        cerrarFormulario.style.display = "block";
+        // cerrarFormulario.style.display = "block";
     });
 });
 

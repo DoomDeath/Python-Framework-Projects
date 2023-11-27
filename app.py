@@ -286,7 +286,7 @@ def insertar_usuario():
                 )
                 flash("Usuario creado exitosamente", "success")
             else:
-                flash("El usuario ya existe en la base de datos.", "error")
+                flash("El usuario o correo electronico ya existe en la base de datos.", "error")
         except Exception as e:
             # Manejar otras excepciones si es necesario
             flash(f"Error al crear el usuario: {str(e)}", "error")
