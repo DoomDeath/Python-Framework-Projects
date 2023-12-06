@@ -16,6 +16,11 @@ from utils.utils import RestriccionUsuarios
 
 app = Flask(__name__)
 
+# Establecer el atributo SameSite para las cookies de sesión
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = True  # Asegúrate de utilizar HTTPS
+
+
 # Configura el LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -333,10 +338,12 @@ def editar_datos():
             f"SE ACTUALIZA POR USUARIO: {session['user']} - SE HA ACTUALIZADO USUARIO: {data['nombre']}"
         )
 
+         # Indicar al cliente que debe recargar la página
+        response_data = {'mensaje': 'Datos guardados exitosamente', 'reload_page': True}
         flash("Usuario actualizado exitosamente", "success")
 
-        # Devuelve un mensaje de éxito
-        return jsonify({'mensaje': 'Datos guardados exitosamente'})
+        # Devuelve una respuesta JSON con la indicación de recargar la página
+        return jsonify(response_data)
     except Roles.DoesNotExist:
         # Devuelve un mensaje de error si no se encuentra el rol
         return jsonify({'mensaje': 'Rol no encontrado'}), 404

@@ -63,6 +63,8 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Antes de la solicitud AJAX:", dataToSave);
 
             if (button.textContent === "Guardar") {
+                // Mostrar overlay antes de recargar la página
+                mostrarOverlay();
 
                 const seleccion = seleccionarOpcion(tipoUsuarioSelect);
                 dataToSave['TipoUsuario'] = seleccion;
@@ -79,11 +81,24 @@ document.addEventListener("DOMContentLoaded", function () {
                     .then(response => response.json())
                     .then(data => {
                         console.log(data.mensaje);
+                        
+
+                        if (data.reload_page) {
+                            // Recargar la página
+                            location.reload(true);
+
+                        }
+                        else {
+                            // Ocultar overlay si no se recarga la página
+                            ocultarOverlay();
+                        }
                     })
                     .catch(error => {
                         console.error("Error al guardar los datos:", error);
+                        // Ocultar overlay en caso de error
+                        ocultarOverlay();
                     });
-                    
+
                 cells.forEach(cell => {
                     cell.setAttribute("contenteditable", "false");
                 });
@@ -101,6 +116,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 button.textContent = "Guardar";
+                // location.reload(true);
+
             }
         });
     });
@@ -119,4 +136,13 @@ function seleccionarOpcion(selectElement) {
     console.log("Texto seleccionado: " + selectedText);
 
     return selectedText
+}
+
+
+function mostrarOverlay() {
+    document.getElementById('overlay').style.display = 'flex';
+}
+
+function ocultarOverlay() {
+    document.getElementById('overlay').style.display = 'none';
 }

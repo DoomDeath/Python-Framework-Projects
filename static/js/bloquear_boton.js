@@ -11,7 +11,10 @@ function enviarFormulario(idButton, idForm) {
     } else if (idButton === 'button_search') {
         boton.style.backgroundColor = '#CCCCCC';
         boton.innerText = 'Buscando...';
-    } else {
+    } else if (idButton === 'buttonDelete') {
+
+    }
+    else {
         boton.style.backgroundColor = '#CCCCCC';
         boton.innerText = 'Cargando...';
     }
