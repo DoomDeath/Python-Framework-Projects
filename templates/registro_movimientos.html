@@ -1,45 +1,68 @@
 {% extends 'base.html' %}
 {% block content %}
-<main>
-    <h1>Registro de Movimientos de Usuarios</h1>
 
-    <!-- Barra de búsqueda -->
-    <form id="searchForm" method="POST" action="/movimientos_usuario_busqueda"
-        onsubmit="return enviarFormulario('button_search', 'searchForm')">
-        <input type="text" id="searchInput" name="busqueda" placeholder="Buscar por usuario...">
-        <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: center;">
-            <label for="accionCheckbox">Accion</label>
-            <input type="checkbox" id="accionCheckbox" name="criterio" value="accion">
-            <label for="descripcionCheckbox">Descripcion</label>
-            <input type="checkbox" id="descripcionCheckbox" name="criterio" value="descripcion">
-            <label for="fechaCheckbox">Fecha</label>
-            <input type="checkbox" id="fechaCheckbox" name="criterio" value="fecha">
-             <button type="submit" id="button_search" value="Buscar">Buscar</button>
-        </div>
-    </form>
+    <script src="{{ url_for('static', filename='js/buscador_ocultar.js') }}"></script>
+    <main>
+        <h1>Registro de Movimientos de Usuarios</h1>
+
+        <!-- Botón para realizar nueva búsqueda -->
+        <button id="btn-nueva-busqueda" onclick="toggleBusqueda()">Nueva Búsqueda</button>
 
 
-    <!-- Tabla de registros -->
-    <table>
-        <thead>
+        <!-- Barra de búsqueda -->
+        <form id="searchForm" method="POST" action="/movimientos_usuario_busqueda" style="display: none;"
+              onsubmit="return enviarFormulario('button_search', 'searchForm')">
+            <input type="text" id="searchInput" name="busqueda" placeholder="Buscar por usuario...">
+            <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: center;">
+                <label for="accionCheckbox">Accion</label>
+                <input type="checkbox" id="accionCheckbox" name="criterio" value="accion">
+                <label for="descripcionCheckbox">Descripcion</label>
+                <input type="checkbox" id="descripcionCheckbox" name="criterio" value="descripcion">
+                <label for="fechaCheckbox">Fecha</label>
+                <input type="checkbox" id="fechaCheckbox" name="criterio" value="fecha">
+                <button type="submit" id="button_search" value="Buscar" onclick="toggleBusqueda()">Buscar</button>
+            </div>
+        </form>
+
+        <!-- Tabla de registros -->
+        <table>
+            <thead>
             <tr>
                 <th>Usuario</th>
                 <th>Accion</th>
                 <th>Fecha</th>
                 <th>Descripción</th>
             </tr>
-        </thead>
-        <tbody id="movementsTable">
+            </thead>
+            <tbody id="movementsTable">
             {% for movimiento in movimientos %}
-            <tr>
-                <td>{{ movimiento.nombre_usuario }}</td>
-                <td>{{ movimiento.accion }}</td>
-                <td>{{ movimiento.fecha_hora }}</td>
-                <td>{{ movimiento.descripcion }}</td>
-            </tr>
+                <tr>
+                    <td>{{ movimiento.nombre_usuario }}</td>
+                    <td>{{ movimiento.accion }}</td>
+                    <td>{{ movimiento.fecha_hora }}</td>
+                    <td>{{ movimiento.descripcion }}</td>
+                </tr>
             {% endfor %}
             <!-- Los registros se llenarán dinámicamente aquí -->
-        </tbody>
-    </table>
-</main>
+            </tbody>
+        </table>
+
+        <!-- Paginación -->
+        {% if pagina_actual is defined %}
+            <div id="paginador" class="pagination" style="display: none;">
+                {% if pagina_actual > 1 %}
+                    <a href="{{ url_for('movimientos_usuarios_busqueda', pagina_actual=pagina_actual-1, busqueda=request.form['busqueda'], criterio=request.form['criterio']) }}">Anterior</a>
+                {% endif %}
+
+                Página {{ pagina_actual }} de {{ total_paginas }}
+
+                {% if has_next %}
+                    <a href="
+
+                            {{ url_for('movimientos_usuarios_busqueda', pagina_actual=pagina_actual+1, busqueda=request.form['busqueda'], criterio=request.form['criterio']) }}">Siguiente</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </main>
 {% endblock %}

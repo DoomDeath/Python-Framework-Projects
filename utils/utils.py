@@ -1,5 +1,7 @@
 
 from functools import wraps
+from math import ceil
+
 from flask import app, flash, redirect, render_template, session, url_for
 from models.registro_movimientos import RegistroDTO
 from models.usuario import RegistroDeActividades, db
@@ -30,17 +32,57 @@ class RegistroActividades():
             descripcion=descripcion
         )
 
-    def buscar_registros(termino, columna_busqueda):
+    # def buscar_registros(termino, columna_busqueda):
+    #     termino = termino or ''
+    #     columna_busqueda = columna_busqueda or ''
+    #     query = "SELECT * FROM buscar_registros()"
+    #     # Agregar condiciones solo si los parámetros no están vacíos
+    #     if termino or columna_busqueda:
+    #         query += f" WHERE LOWER({columna_busqueda}) ILIKE '%{termino}%'"
+    #         query = f"SELECT * FROM buscar_registros('{termino}', '{columna_busqueda}')"
+    #
+    #     # Ejecutar la consulta y obtener los resultados
+    #     resultados = list(db.execute_sql(query))
+    #
+    #     registros_peewee = [RegistroDTO(
+    #         registro_id=resultado[0],
+    #         usuario_id=resultado[1],
+    #         nombre_usuario=resultado[2],
+    #         accion=resultado[3],
+    #         fecha_hora=RegistroActividades.fomatear_fecha(resultado[4]),  # Aquí se llama la función
+    #         descripcion=resultado[5]
+    #     ) for resultado in resultados]
+    #
+    #     return registros_peewee
+
+    def buscar_registros(termino, columna_busqueda, page, per_page):
         termino = termino or ''
         columna_busqueda = columna_busqueda or ''
+
+        # Calcula el índice de inicio y fin para la paginación
+        start = (page - 1) * per_page
+
+        # Consulta para obtener el número total de registros sin paginación
+        count_query = "SELECT COUNT(*) FROM buscar_registros()"
+        count_result = db.execute_sql(count_query).fetchone()
+        total_registros = count_result[0]
+
+        # Calcula el número total de páginas
+        total_paginas = ceil(total_registros / per_page)
+
         query = "SELECT * FROM buscar_registros()"
         # Agregar condiciones solo si los parámetros no están vacíos
         if termino or columna_busqueda:
-            query += f" WHERE LOWER({columna_busqueda}) ILIKE '%{termino}%'"
-            query = f"SELECT * FROM buscar_registros('{termino}', '{columna_busqueda}')"
+            query += f" WHERE LOWER({columna_busqueda}) ILIKE %s"
+            parametros = (f"%{termino}%",)
+        else:
+            parametros = ()
+
+        # Agrega la cláusula LIMIT y OFFSET para paginar
+        query += f" LIMIT {per_page} OFFSET {start}"
 
         # Ejecutar la consulta y obtener los resultados
-        resultados = list(db.execute_sql(query))
+        resultados = list(db.execute_sql(query, parametros))
 
         registros_peewee = [RegistroDTO(
             registro_id=resultado[0],
@@ -51,7 +93,13 @@ class RegistroActividades():
             descripcion=resultado[5]
         ) for resultado in resultados]
 
-        return registros_peewee
+        # Devolver los resultados junto con la información de paginación
+        return {
+            'registros': registros_peewee,
+            'total_registros': total_registros,
+            'total_paginas': total_paginas,
+            'pagina_actual': page
+        }
 
     @staticmethod
     def fomatear_fecha(timestamp):

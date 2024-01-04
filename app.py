@@ -1,3 +1,4 @@
+# noinspection PyInterpreter
 import base64
 import datetime
 from flask import Flask, flash, render_template, redirect, url_for, request, session, jsonify
@@ -20,7 +21,6 @@ app = Flask(__name__)
 app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 app.config['SESSION_COOKIE_SECURE'] = True  # Asegúrate de utilizar HTTPS
 
-
 # Configura el LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -40,13 +40,12 @@ def utility_processor():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-
     nombre_disco = request.form["nombre_disco"]
     artista = request.form["artista"]
     anio_lanzamiento = request.form["anio_lanzamiento"]
     genero = request.form["genero"]
     formato = request.form["formato"]
-    categoria=request.form["categorias"]
+    categoria = request.form["categorias"]
 
     if 'file' not in request.files:
         flash('No se seleccionó ningún archivo.')
@@ -57,22 +56,24 @@ def upload():
     if file.filename == '':
         flash('No se seleccionó ningún archivo.')
         return redirect(request.url)
-    #se uriliza api imgbb
+    # se uriliza api imgbb
     image_url = subir_imagen(file)
 
     if image_url:
-        nuevo_disco = DiscoService.guardar_disco(nombre_disco, artista, anio_lanzamiento, genero, formato, categoria, image_url)
+        nuevo_disco = DiscoService.guardar_disco(nombre_disco, artista, anio_lanzamiento, genero, formato, categoria,
+                                                 image_url)
         flash(f'Imagen subida exitosamente. URL: {image_url}')
         flash(f'Se agrega disco exitosamente')
 
     return redirect(url_for('ingreso_disco'))
 
+
 @app.route('/ingreso_disco')
 @login_required
 def ingreso_disco():
-
     categorias = Categoria.select()
     return render_template('disc/ingreso_disco.html', categorias=categorias)
+
 
 @app.route('/tabla_discos')
 @login_required
@@ -101,18 +102,29 @@ def tabla_usuarios():
 def movimientos_usuarios():
     return render_template('registro_movimientos.html')
 
+    # REVISAR SI QUEDA COMO ENDPOINT
 
 
-    #REVISAR SI QUEDA COMO ENDPOINT
-
-@app.route('/movimientos_usuario_busqueda', methods=["POST"])
+@app.route('/movimientos_usuario_busqueda', methods=["GET", "POST"])
 @login_required
 @restriccion_usuarios.admin_required
 def movimientos_usuarios_busqueda():
-    busqueda = request.form["busqueda"]
-    criterio = request.form.get("criterio", '')
-    movimientos = RegistroActividades.buscar_registros(busqueda, criterio)
-    return render_template('registro_movimientos.html', movimientos=movimientos)
+    # Obtener la página y per_page de los parámetros de la solicitud
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 10))
+    movimientos = RegistroActividades.buscar_registros(request.form["busqueda"], request.form.get("criterio", ''), page, per_page)
+
+    # Desempaquetar la respuesta para pasarla al render_template
+    registros = movimientos['registros']
+    total_registros = movimientos['total_registros']
+    total_paginas = movimientos['total_paginas']
+    pagina_actual = movimientos['pagina_actual']
+
+    # Calcular si hay una página siguiente
+    has_next = pagina_actual < total_paginas
+
+    return render_template('registro_movimientos.html', movimientos=registros, total_registros=total_registros,
+                           total_paginas=total_paginas, pagina_actual=pagina_actual, has_next=has_next)
 
 
 # Función para cargar un usuario por ID
@@ -170,12 +182,16 @@ def registrar_usuario_cliente():
     try:
         nombre = request.form["nombre"]
         if not ValidadorUsuario.validar_usuario(nombre):
-            flash('El nombre de usuario no es válido. Debe tener entre 3 y 20 caracteres y contener solo letras y números (sin espacios).', 'error')
+            flash(
+                'El nombre de usuario no es válido. Debe tener entre 3 y 20 caracteres y contener solo letras y '
+                'números (sin espacios).',
+                'error')
             return redirect(url_for('index'))
         correo = request.form["correo"]
         contrasena = request.form["contrasena"]
         if not ValidadorUsuario.validar_contrasena(contrasena):
-            # Si la contraseña no cumple con los criterios, el mensaje de error ya fue flash y ahora rediriges a la página principal
+            # Si la contraseña no cumple con los criterios, el mensaje de error ya fue flash y ahora rediriges a la
+            # página principal
             return redirect(url_for('index'))
         tipo_usuario = 'User'
 
@@ -338,7 +354,7 @@ def editar_datos():
             f"SE ACTUALIZA POR USUARIO: {session['user']} - SE HA ACTUALIZADO USUARIO: {data['nombre']}"
         )
 
-         # Indicar al cliente que debe recargar la página
+        # Indicar al cliente que debe recargar la página
         response_data = {'mensaje': 'Datos guardados exitosamente', 'reload_page': True}
         flash("Usuario actualizado exitosamente", "success")
 
