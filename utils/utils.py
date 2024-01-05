@@ -1,4 +1,3 @@
-
 from functools import wraps
 from math import ceil
 
@@ -16,11 +15,9 @@ class RestriccionUsuarios():
             if 'tipo' in session and session['tipo'] == 'Admin':
                 return view_func(*args, **kwargs)
             else:
-                return render_template("acceso_restringido.html") # Redirige al usuario a la página de inicio de sesión
-        return decorated_view
-    
-    
+                return render_template("acceso_restringido.html")  # Redirige al usuario a la página de inicio de sesión
 
+        return decorated_view
 
 
 class RegistroActividades():
@@ -59,18 +56,19 @@ class RegistroActividades():
         termino = termino or ''
         columna_busqueda = columna_busqueda or ''
 
-        # Calcula el índice de inicio y fin para la paginación
-        start = (page - 1) * per_page
-
-        # Consulta para obtener el número total de registros sin paginación
+        # Consulta para obtener el número total de registros con condiciones de búsqueda
         count_query = "SELECT COUNT(*) FROM buscar_registros()"
-        count_result = db.execute_sql(count_query).fetchone()
+        if termino or columna_busqueda:
+            count_query += f" WHERE LOWER({columna_busqueda}) ILIKE %s"
+            parametros_count = (f"%{termino}%",)
+        else:
+            parametros_count = ()
+        count_result = db.execute_sql(count_query, parametros_count).fetchone()
         total_registros = count_result[0]
 
-        # Calcula el número total de páginas
-        total_paginas = ceil(total_registros / per_page)
-
+        # Consulta para obtener registros con condiciones de búsqueda y aplicar paginación en la base de datos
         query = "SELECT * FROM buscar_registros()"
+
         # Agregar condiciones solo si los parámetros no están vacíos
         if termino or columna_busqueda:
             query += f" WHERE LOWER({columna_busqueda}) ILIKE %s"
@@ -78,11 +76,17 @@ class RegistroActividades():
         else:
             parametros = ()
 
-        # Agrega la cláusula LIMIT y OFFSET para paginar
+        # Calcular el índice de inicio para la paginación
+        start = (page - 1) * per_page
+
+        # Agregar la cláusula LIMIT y OFFSET para paginar directamente en la base de datos
         query += f" LIMIT {per_page} OFFSET {start}"
 
         # Ejecutar la consulta y obtener los resultados
         resultados = list(db.execute_sql(query, parametros))
+
+        # Calcular el número total de páginas
+        total_paginas = ceil(total_registros / per_page)
 
         registros_peewee = [RegistroDTO(
             registro_id=resultado[0],
@@ -119,7 +123,7 @@ class ValidadorUsuario():
             if usuario.isalnum() and ' ' not in usuario:
                 return True
         return False
-    
+
     def validar_contrasena(contrasena):
         longitud_minima = 8
         contiene_mayuscula = any(c.isupper() for c in contrasena)
@@ -127,10 +131,10 @@ class ValidadorUsuario():
         contiene_numero = any(c.isdigit() for c in contrasena)
 
         if (
-            longitud_minima <= len(contrasena) and
-            contiene_mayuscula and
-            contiene_minuscula and
-            contiene_numero
+                longitud_minima <= len(contrasena) and
+                contiene_mayuscula and
+                contiene_minuscula and
+                contiene_numero
         ):
             return True
         else:

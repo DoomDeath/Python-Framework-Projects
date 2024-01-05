@@ -1,7 +1,7 @@
 # noinspection PyInterpreter
 import base64
 import datetime
-from flask import Flask, flash, render_template, redirect, url_for, request, session, jsonify
+from flask import Flask, flash, render_template, redirect, url_for, request, session, jsonify, make_response
 from flask_login import LoginManager, login_user, logout_user, login_required
 from psycopg2 import IntegrityError
 import requests
@@ -30,6 +30,18 @@ github_service = GitHubService(GITHUB_USERNAME, GITHUB_REPO, GITHUB_TOKEN)
 restriccion_usuarios = RestriccionUsuarios()
 
 app.config.from_pyfile('config.py')
+
+
+# # Middleware para verificar la página abierta
+# @app.before_request
+# def verificar_pagina_abierta():
+#     ruta_actual = request.endpoint
+#     if ruta_actual and ruta_actual != 'static':
+#         if ruta_actual in session:
+#             # El usuario ya tiene abierta la página, redirigir a la página actual
+#             return redirect("ACCESS DENIED", code=200)
+#         # Marcar la página actual como abierta en la sesión
+#         session[ruta_actual] = True
 
 
 @app.context_processor
@@ -110,9 +122,18 @@ def movimientos_usuarios():
 @restriccion_usuarios.admin_required
 def movimientos_usuarios_busqueda():
     # Obtener la página y per_page de los parámetros de la solicitud
-    page = int(request.args.get('page', 1))
-    per_page = int(request.args.get('per_page', 10))
-    movimientos = RegistroActividades.buscar_registros(request.form["busqueda"], request.form.get("criterio", ''), page, per_page)
+    page = 1
+    if request.method == 'POST':
+        busqueda = request.form["busqueda"]
+        criterio = request.form.get("criterio", '')
+
+    else:
+        print(request.args)
+        busqueda = request.cookies.get('busqueda')
+        criterio = request.cookies.get('criterio')
+        page = int(request.args.get('pagina_actual', 1))
+
+    movimientos = RegistroActividades.buscar_registros(busqueda, criterio, page, 10)
 
     # Desempaquetar la respuesta para pasarla al render_template
     registros = movimientos['registros']
@@ -122,9 +143,12 @@ def movimientos_usuarios_busqueda():
 
     # Calcular si hay una página siguiente
     has_next = pagina_actual < total_paginas
-
-    return render_template('registro_movimientos.html', movimientos=registros, total_registros=total_registros,
-                           total_paginas=total_paginas, pagina_actual=pagina_actual, has_next=has_next)
+    response = make_response(
+        render_template('registro_movimientos.html', movimientos=registros, total_registros=total_registros,
+                        total_paginas=total_paginas, pagina_actual=pagina_actual, has_next=has_next))
+    response.set_cookie('busqueda', busqueda)
+    response.set_cookie('criterio', criterio)
+    return response
 
 
 # Función para cargar un usuario por ID

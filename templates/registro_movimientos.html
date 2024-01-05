@@ -12,7 +12,8 @@
         <!-- Barra de búsqueda -->
         <form id="searchForm" method="POST" action="/movimientos_usuario_busqueda" style="display: none;"
               onsubmit="return enviarFormulario('button_search', 'searchForm')">
-            <input type="text" id="searchInput" name="busqueda" placeholder="Buscar por usuario...">
+            <label for="searchInput"></label><input type="text" id="searchInput" name="busqueda"
+                                                    placeholder="Buscar por usuario...">
             <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: center;">
                 <label for="accionCheckbox">Accion</label>
                 <input type="checkbox" id="accionCheckbox" name="criterio" value="accion">
@@ -47,22 +48,20 @@
             </tbody>
         </table>
 
-        <!-- Paginación -->
         {% if pagina_actual is defined %}
-            <div id="paginador" class="pagination" style="display: none;">
+            <form id="paginador">
                 {% if pagina_actual > 1 %}
-                    <a href="{{ url_for('movimientos_usuarios_busqueda', pagina_actual=pagina_actual-1, busqueda=request.form['busqueda'], criterio=request.form['criterio']) }}">Anterior</a>
+                    <a id="paginador_anterior" onclick="return enviarFormulario('paginador_anterior', '')"
+                       href="{{ url_for('movimientos_usuarios_busqueda', pagina_actual=pagina_actual-1) }}"> << </a>
                 {% endif %}
-
                 Página {{ pagina_actual }} de {{ total_paginas }}
-
                 {% if has_next %}
-                    <a href="
-
-                            {{ url_for('movimientos_usuarios_busqueda', pagina_actual=pagina_actual+1, busqueda=request.form['busqueda'], criterio=request.form['criterio']) }}">Siguiente</a>
+                    <a id="paginador_siguiente" onclick="return enviarFormulario('paginador_siguiente', '')"
+                       href="
+                       {{ url_for('movimientos_usuarios_busqueda', pagina_actual=pagina_actual+1)}}"> >> </a>
                 {% endif %}
-            </div>
-        {% endif %}
 
+            </form>
+        {% endif %}
     </main>
 {% endblock %}
