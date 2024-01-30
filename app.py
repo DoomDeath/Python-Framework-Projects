@@ -6,6 +6,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required
 from psycopg2 import IntegrityError
 import requests
 
+import utils.utils
 from config import GITHUB_USERNAME, GITHUB_REPO, GITHUB_TOKEN
 from models.usuario import Acceso, Usuario, Roles, Disco, Categorizacion, Categoria
 from services.discos_service import DiscoService
@@ -46,6 +47,7 @@ app.config.from_pyfile('config.py')
 
 @app.context_processor
 def utility_processor():
+    print(utils.utils.RegistroActividades.saludar("Gustavo"))
     fecha_actual = datetime.date.today()
     return {'fecha_actual': fecha_actual}
 
@@ -131,7 +133,7 @@ def movimientos_usuarios_busqueda():
         print(request.args)
         busqueda = request.cookies.get('busqueda')
         criterio = request.cookies.get('criterio')
-        page = int(request.args.get('pagina_actual', 1))
+        page = max(int(request.args.get('pagina_actual', 1)), 1)
 
     movimientos = RegistroActividades.buscar_registros(busqueda, criterio, page, 10)
 

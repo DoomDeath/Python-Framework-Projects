@@ -112,6 +112,11 @@ class RegistroActividades():
         timestamp_without_fraction = parts[0]
         return timestamp_without_fraction
 
+    @staticmethod
+    def saludar(nombre):
+        print(nombre)
+        return "Salud :" + nombre
+
 
 class ValidadorUsuario():
     def validar_usuario(usuario):

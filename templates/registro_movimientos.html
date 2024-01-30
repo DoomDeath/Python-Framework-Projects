@@ -47,21 +47,6 @@
             <!-- Los registros se llenarán dinámicamente aquí -->
             </tbody>
         </table>
-
-        {% if pagina_actual is defined %}
-            <form id="paginador">
-                {% if pagina_actual > 1 %}
-                    <a id="paginador_anterior" onclick="return enviarFormulario('paginador_anterior', '')"
-                       href="{{ url_for('movimientos_usuarios_busqueda', pagina_actual=pagina_actual-1) }}"> << </a>
-                {% endif %}
-                Página {{ pagina_actual }} de {{ total_paginas }}
-                {% if has_next %}
-                    <a id="paginador_siguiente" onclick="return enviarFormulario('paginador_siguiente', '')"
-                       href="
-                       {{ url_for('movimientos_usuarios_busqueda', pagina_actual=pagina_actual+1)}}"> >> </a>
-                {% endif %}
-
-            </form>
-        {% endif %}
+        {% include 'paginador_registro.html' %}
     </main>
 {% endblock %}

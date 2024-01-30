@@ -1,0 +1,23 @@
+{% block content %}
+
+    <form id="paginador">
+        {% if pagina_actual is defined and total_paginas > 0 %}
+            {% if pagina_actual > total_paginas or total_registros == 0 %}
+                <p>No se encuentran resultados</p>
+            {% else %}
+                {% if pagina_actual > 1 %}
+                    <a id="paginador_anterior" onclick="return enviarFormulario('paginador_anterior', '')"
+                       href="{{ url_for('movimientos_usuarios_busqueda', pagina_actual=pagina_actual-1) }}"> << </a>
+                {% endif %}
+                Página {{ pagina_actual }} de {{ total_paginas }}
+                {% if has_next %}
+                    <a id="paginador_siguiente" onclick="return enviarFormulario('paginador_siguiente', '')"
+                       href="{{ url_for('movimientos_usuarios_busqueda', pagina_actual=pagina_actual+1)}}"> >> </a>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <p>No se encuentran resultados</p>
+        {% endif %}
+    </form>
+
+{% endblock %}
