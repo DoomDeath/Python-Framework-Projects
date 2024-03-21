@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<script src="{{ url_for('static', filename='js/validacion_imagenes.js') }}"></script>
+<main>
+    <h1>Registro Titulos</h1>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div id="flash-messages">
+        {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <form id="guardar_disco_form" method="post" action="/upload" enctype="multipart/form-data">
+        <label for="nombre_disco">Nombre del Disco:</label>
+        <input type="text" id="nombre_disco" name="nombre_disco" required>
+
+        <label for="artista">Artista:</label>
+        <input type="text" id="artista" name="artista">
+
+        <label for="anio_lanzamiento">Año de Lanzamiento:</label>
+        <input type="number" id="anio_lanzamiento" name="anio_lanzamiento"style="margin-bottom: 10px;">
+
+        <label for="genero">Género:</label>
+        <input type="text" id="genero" name="genero">
+
+        <label for="categorias">Selecciona una categoría:</label>
+        <select style="margin-bottom: 10px;" id="categorias" name="categorias">
+            {% for categoria in categorias %}
+                <option value="{{ categoria.categoria_id }}">{{ categoria.nombre_categoria }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="formato">Formato:</label>
+        <input type="text" id="formato" name="formato">
+
+        <label for="imagen">Imagen (JPEG):</label>
+        <input style="margin-bottom: 10px;" type="file" id="imagen" name="file" accept=".jpg, .jpeg" required>
+
+
+        <!-- Fecha de registro se establecerá automáticamente en el servidor -->
+        <!-- Fecha de actualización también se establecerá automáticamente en el servidor -->
+
+        <button type="submit">Guardar Disco</button>
+    </form>
+
+</main>
+{% endblock %}

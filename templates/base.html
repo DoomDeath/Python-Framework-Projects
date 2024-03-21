@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Inicio Session</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/alert.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/spinner.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/overlay.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tabla_discos.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/paginador.css') }}">
+
+
+</head>
+
+<body>
+    <div id="overlay">
+        <p>Cargando...</p>
+    </div>
+
+    {% if current_page != 'index' and current_page != '/' %}
+    <header>
+        <nav>
+            <div style="display: flex; justify-content: space-between;">
+                <span>Bienvenid@, {{ session['user'] }}</span>
+                <div class="dropdown">
+                    <div class="dropdown-content">
+
+                        <a href="/panel">Dashboard</a>
+
+                    </div>
+                </div>
+                <form id="form_logout" method="post" action="{{ url_for('logout') }}"
+                    onsubmit="return enviarFormulario('id_logout', 'form_logout')">
+                    <button id="id_logout" type="submit" style="background-color: #512121;">Cerrar Sesión</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+    {% endif %}
+    {% block content %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buscador_actividades.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/spinner.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bloquear_boton.js') }}"></script>
+    <footer>
+        <p>&copy; {{ fecha_actual }} - Derechos reservados - Gustavo Burgos</p>
+    </footer>
+</body>
+
+</html>

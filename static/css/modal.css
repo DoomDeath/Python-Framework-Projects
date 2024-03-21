@@ -1,0 +1,136 @@
+/* Fondo modal: negro con opacidad al 50% */
+.modal {
+  display: none; /* Por defecto, estará oculto */
+  position: fixed; /* Posición fija */
+  z-index: 1; /* Se situará por encima de otros elementos de la página*/
+  padding-top: 200px; /* El contenido estará situado a 200px de la parte superior */
+  left: 0;
+  top: 0;
+  width: 100%; /* Ancho completo */
+  height: 100%; /* Algura completa */
+  overflow: auto; /* Se activará el scroll si es necesario */
+  background-color: rgba(0,0,0,0.5); /* Color negro con opacidad del 50% */
+}
+
+/* Ventana o caja modal */
+.modal-content {
+  position: relative; /* Relativo con respecto al contenedor -modal- */
+  background-color: white;
+  margin: auto; /* Centrada */
+  padding: 20px;
+  height: 20%;
+  width: 30%;
+  -webkit-animation-name: animarsuperior;
+  -webkit-animation-duration: 0.5s;
+  animation-name: animarsuperior;
+  animation-duration: 0.5s
+}
+
+/* Animación */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+@keyframes animarsuperior {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* Botón cerrar */
+.close {
+  color: black;
+  float: right;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/*!*Efecto*!*/
+/*.modal {*/
+/*    position: fixed;*/
+/*    font-family: Arial, sans-serif;*/
+/*    top: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*    left: 0;*/
+/*    background: rgba(0,0,0,0.8);*/
+/*    z-index: 99999;*/
+/*    opacity:0;*/
+/*    -webkit-transition: opacity 400ms ease-in;*/
+/*    -moz-transition: opacity 400ms ease-in;*/
+/*    transition: opacity 400ms ease-in;*/
+/*    pointer-events: none;*/
+/*}*/
+/*.modal:target {*/
+/*    opacity:1;*/
+/*    pointer-events: auto;*/
+/*}*/
+
+/*!*Formato de la ventana*!*/
+/*.modalbox{*/
+/*    width: 400px;*/
+/*    position: relative;*/
+/*    padding: 5px 20px 13px 20px;*/
+/*    background: #fff;*/
+/*    border-radius:3px;*/
+/*    -webkit-transition: all 500ms ease-in;*/
+/*    -moz-transition: all 500ms ease-in;*/
+/*    transition: all 500ms ease-in;*/
+
+/*}*/
+
+/*!*Movimientos*!*/
+/*.movedown {*/
+/*    margin: 0 auto;*/
+/*}*/
+/*.rotate {*/
+/*    margin: 10% auto;*/
+/*    -webkit-transform: scale(-5,-5);*/
+/*    transform: scale(-5,-5);*/
+/*}*/
+/*.resize {*/
+/*    margin: 10% auto;*/
+/*    width:0;*/
+/*    height:0;*/
+
+/*}*/
+/*.modal:target .movedown{*/
+/*    margin:10% auto;*/
+/*}*/
+/*.modal:target .rotate{*/
+/*    transform: rotate(360deg) scale(1,1);*/
+/*        -webkit-transform: rotate(360deg) scale(1,1);*/
+/*}*/
+
+/*.modal:target .resize{*/
+/*    width:400px;*/
+/*    height:200px;*/
+/*}*/
+
+/*!*Boton de cerrar*!*/
+/*.close {*/
+/*    background: #606061;*/
+/*    color: #FFFFFF;*/
+/*    line-height: 25px;*/
+/*    position: absolute;*/
+/*    right: 1px;*/
+/*    text-align: center;*/
+/*    top: 1px;*/
+/*    width: 24px;*/
+/*    text-decoration: none;*/
+/*    font-weight: bold;*/
+/*    border-radius:3px;*/
+
+/*}*/
+
+/*.close:hover {*/
+/*    background: #FAAC58;*/
+/*    color:#222;*/
+/*}*/

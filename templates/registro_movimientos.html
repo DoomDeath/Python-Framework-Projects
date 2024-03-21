@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <script src="{{ url_for('static', filename='js/buscador_ocultar.js') }}"></script>
+    <main>
+        <h1>Registro de Movimientos de Usuarios</h1>
+
+        <!-- Botón para realizar nueva búsqueda -->
+        <button id="btn-nueva-busqueda" onclick="toggleBusqueda()">Nueva Búsqueda</button>
+
+
+        <!-- Barra de búsqueda -->
+        <form id="searchForm" method="POST" action="/movimientos_usuario_busqueda" style="display: none;"
+              onsubmit="return enviarFormulario('button_search', 'searchForm')">
+            <label for="searchInput"></label><input type="text" id="searchInput" name="busqueda"
+                                                    placeholder="Buscar por usuario...">
+            <div style="display: flex; align-items: center; flex-wrap: nowrap; justify-content: center;">
+                <label for="accionCheckbox">Accion</label>
+                <input type="checkbox" id="accionCheckbox" name="criterio" value="accion">
+                <label for="descripcionCheckbox">Descripcion</label>
+                <input type="checkbox" id="descripcionCheckbox" name="criterio" value="descripcion">
+                <label for="fechaCheckbox">Fecha</label>
+                <input type="checkbox" id="fechaCheckbox" name="criterio" value="fecha">
+                <button type="submit" id="button_search" value="Buscar" onclick="toggleBusqueda()">Buscar</button>
+            </div>
+        </form>
+
+        <!-- Tabla de registros -->
+        <table>
+            <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Accion</th>
+                <th>Fecha</th>
+                <th>Descripción</th>
+            </tr>
+            </thead>
+            <tbody id="movementsTable">
+            {% for movimiento in movimientos %}
+                <tr>
+                    <td>{{ movimiento.nombre_usuario }}</td>
+                    <td>{{ movimiento.accion }}</td>
+                    <td>{{ movimiento.fecha_hora }}</td>
+                    <td>{{ movimiento.descripcion }}</td>
+                </tr>
+            {% endfor %}
+            <!-- Los registros se llenarán dinámicamente aquí -->
+            </tbody>
+        </table>
+        {% include 'paginador_registro.html' %}
+    </main>
+{% endblock %}

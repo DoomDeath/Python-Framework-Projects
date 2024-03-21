@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal_error.js') }}"></script>
+
+<main id="formularioCrearUsuario" style="display: none;">
+    <form id="formCreateUser" action="{{ url_for('insertar_usuario') }}" method="POST"
+          onsubmit="return enviarFormulario('buttonSend', 'formCreateUser')">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="correo">Correo Electrónico:</label>
+        <input type="email" id="correo" name="correo" required>
+
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" name="contrasena" required>
+
+        <label for="roles">Tipo de usuario</label>
+        <select name="roles" style="margin-top: 1rem; margin-bottom: 1rem;">
+            {% for role in roles %}
+            <option name="roles" value="{{ role }}|{{ role.nombre_rol }}">{{ role.nombre_rol }}</option>
+            {% endfor %}
+        </select>
+
+        <br>
+        <button id="buttonSend" type="submit" value="Crear Registro">Crear Registro</button>
+        <input type="submit" id="cancelar" value="Cancelar">
+        <br>
+    </form>
+</main>
+
+
+<main>
+    <!--    {% with messages = get_flashed_messages() %}-->
+    <!--    {% if messages %}-->
+    <!--    <div id="flash-messages">-->
+    <!--        {% for message in messages %}-->
+    <!--        <div class="alert alert-danger">{{ message }}</div>-->
+    <!--        {% endfor %}-->
+    <!--    </div>-->
+    <!--    {% endif %}-->
+    <!--    {% endwith %}-->
+
+    <!--    {% include "modales/modal_error.html" %}-->
+
+    {% set error_messages = get_flashed_messages() %}
+    {% include "modales/modal_error.html" %}
+
+    <div class="content-container">
+        <h1>Tabla de Usuarios</h1>
+        <a href="#" id="mostrarFormulario">Crear Nuevo Usuario</a>
+
+        <table>
+            <thead>
+            <tr>
+                <th>N°</th>
+                <th>Nombre</th>
+                <th>Correo Electrónico</th>
+                <th>Contraseña</th>
+                <th>Tipo de usuario</th>
+                <th>Fecha de registro</th>
+                <th>Fecha de Actualizacion</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td data-user-id="{{ usuario.id }}" contenteditable="false" class="editable"
+                    data-field-name="nombre">{{ usuario.nombre_usuario }}
+                </td>
+                <td contenteditable="false" class="editable" data-field-name="correo">{{ usuario.correo_electronico
+                    }}
+                </td>
+                <td contenteditable="false" class="editable" data-field-name="Contrasena">{{ usuario.contrasena }}
+                </td>
+                <td contenteditable="false" class="editable" data-field-name="TipoUsuario">
+                    <span class="tipo-usuario-label">{{ usuario.tipo_usuario }}</span>
+
+                    <select class="tipo-usuario-select" style="display: none;"
+                            id="tipo-usuario-select-{{ loop.index }}">
+                        {% for role in roles %}
+                        <option value="{{ role.id }}">{{ role.nombre_rol }}</option>
+                        {% endfor %}
+                    </select>
+
+                </td>
+                <td>{{ usuario.fecha_registro }}</td>
+                <td>{{ usuario.fecha_actualizacion }}</td>
+                <td style="display: flex; justify-content: space-evenly;">
+                    <button class="edit-button">Editar</button>
+                    <form id="formDeleteUsuario" action="{{ url_for('delete_element', index=usuario.id) }}" method="POST"
+                        onsubmit="return enviarFormulario('buttonDelete', 'formDeleteUsuario')">
+                        <input id="buttonDelete" type="submit" value="Eliminar">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</main>
+
+</div>
+
+{% endblock %}

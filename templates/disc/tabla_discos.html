@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<main>
+    <h1>Registros de Discos</h1>
+    
+    <div class="card-container">
+        {% for disco in discos %}
+          <div class="card">
+            <img src="{{ disco.url_imagen }}" alt="{{ disco.nombre_disco }}">
+            <div class="card-content">
+              <h2 class="card-title">{{ disco.nombre_disco }}</h2>
+              <p class="card-description">{{ disco.descripcion }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+    
+</main>
+{% endblock %}

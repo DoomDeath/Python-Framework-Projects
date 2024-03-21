@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main>
+    <div class="content-container">
+        <h2>Dashboard</h2>
+        <p>Bienvenido al panel de control. Aquí encontrarás información y opciones para administrar tu cuenta.</p>
+
+        <div class="dashboard-widgets">
+            <!-- Widget 1 -->
+            <div class="widget">
+                <h3>Estadísticas</h3>
+                <p>Aquí puedes ver las estadísticas de tu cuenta.</p>
+                <a href="/estadisticas">Ver estadísticas</a>
+                <div class="widget">
+                    <h3>Gestión de Discos</h3>
+                    <p><a href="/ingreso_disco">Registrar un titulo</a></p>
+                    <p><a href="/tabla_discos">Gestion de Discos</a></p>
+                    <ul>
+                        <li>Escaneo de Códigos de Barras: Implementa un escáner de códigos de barras para agregar discos
+                            fácilmente.</li>
+                        <li>Registro Detallado de Discos: Permite agregar detalles como fecha de compra, estado del
+                            disco, y comentarios.</li>
+                        <li>Gestión de Estado y Valoración: Permite clasificar, comentar y valorar cada disco.</li>
+                        <li>Compartir en Redes Sociales: Facilita compartir detalles en redes sociales.</li>
+                        <li>Recordatorio de Reproducción: Integra un sistema de recordatorio para programar fechas de
+                            escucha.</li>
+                        <li>Registro de Historial de Reproducción Física: Permite llevar un registro de reproducciones
+                            físicas.</li>
+                        <li>Seguimiento de Eventos y Firmas de Discos: Rastrea eventos relacionados con la colección.
+                        </li>
+                        <li>Conexión con Plataformas de Compra: Integra enlaces a plataformas de compra en línea.</li>
+                        <li>Filtros y Organización Avanzada: Proporciona herramientas de organización por género, fecha,
+                            etc.</li>
+                        <li>Estadísticas de Colección: Ofrece estadísticas detalladas sobre la colección del usuario.
+                        </li>
+                    </ul>
+                </div>
+
+
+
+            </div>
+
+            <!-- Widget 2 -->
+            {% if session['tipo'] == 'Admin' %}
+            <div class="widget">
+                <h3>Gestión de Usuarios</h3>
+                <p>Administra las configuraciones de tu cuenta de usuario.</p>
+                <p><a href="/table_user">Configuración de Usuarios</a></p>
+                <p><a href="/movimietos_usuario">Registro de Movimientos</a></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}

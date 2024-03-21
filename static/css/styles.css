@@ -1,0 +1,141 @@
+/* Estilo del cuerpo de la página */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Estilo del encabezado */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Estilo del encabezado h1 */
+header h1 {
+    font-size: 36px;
+    margin: 0;
+}
+
+/* Estilo de la barra de navegación */
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Estilo del contenido principal */
+main {
+    padding: 20px;
+    background-color: #fff;
+    margin: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    flex: 1;
+}
+
+/* Estilo del pie de página */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Estilo de las tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Estilo de las celdas de encabezado de tabla (th) */
+table th {
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    padding: 10px;
+}
+
+/* Estilo de las celdas de tabla (td) */
+table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+/* Estilo de las filas impares */
+table tr:nth-child(odd) {
+    background-color: #f0f0f0;
+}
+
+/* Estilo de las filas pares */
+table tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+/* Estilo de los campos de formulario */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"]
+textarea {
+    width: 98%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Estilo de las etiquetas de formulario */
+label {
+    display: block;
+    font-weight: bold;
+}
+
+/* Estilo de los botones de formulario */
+input[type="submit"],
+button {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Estilo de los botones de formulario al pasar el ratón sobre ellos */
+input[type="submit"]:hover,
+button:hover {
+    background-color: #555;
+}
+
+/* Estilo de las casillas de verificación y botones de radio */
+input[type="checkbox"],
+input[type="radio"] {
+    margin-right: 5px;
+}
+
+/* Estilo para los mensajes de error o éxito en el formulario (puedes aplicar esto dinámicamente con JavaScript) */
+.error-message {
+    color: #ff0000;
+}
+
+.success-message {
+    color: #00cc00;
+}

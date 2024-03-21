@@ -1,0 +1,19 @@
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+<div>
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <div id="modal-error-messages">
+                {% if error_messages %}
+                <div id="flash-messages">
+                    {% for message in error_messages %}
+                    <div class="alert alert-danger">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

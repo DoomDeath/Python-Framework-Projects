@@ -1,0 +1,29 @@
+{% block content %}
+<main>
+    <div id="overlay">
+        <p>Cargando...</p>
+    </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div id="flash-messages">
+        {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="content-container">
+        <h2>Iniciar Sesión</h2>
+        <form id="form_login" method="POST" action="/login"
+            onsubmit="return enviarFormulario('button_login', 'form_login')">
+            <label for="username">Nombre de usuario:</label>
+            <input type="text" id="username" name="username" required><br><br>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <button id="button_login" type="submit">Iniciar Sesión</button>
+        </form>
+
+        <p>No tienes una cuenta? <a href="#" onclick="mostrarRegistro()">Regístrate</a></p>
+    </div>
+</main>
+{% endblock %}
