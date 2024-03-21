@@ -1,8 +1,6 @@
-from datetime import datetime
-
-from peewee import Model, PostgresqlDatabase, CharField, DateField, ForeignKeyField, BooleanField, IntegerField, \
-    DateTimeField, Column, PrimaryKeyField, SQL, TextField
-from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
+from flask_login import UserMixin
+from peewee import Model, PostgresqlDatabase, CharField, DateField, ForeignKeyField, IntegerField, \
+    DateTimeField, SQL, TextField
 
 # Configura la conexión a la base de datos PostgreSQL
 db = PostgresqlDatabase('dbdi', user='dbdi_user', password='hfB3VFoAb5Q2GVW1jQgPYiA6xuqALu8f',

@@ -12,15 +12,16 @@ Asegúrate de tener una instancia de PostgreSQL disponible y utiliza la siguient
 - **Nombre de Usuario:** dbdi_user
 - **Contraseña:** hfB3VFoAb5Q2GVW1jQgPYiA6xuqALu8f
 
-si tienes problemas con driver postgres ejecuta este comando: pip install psycopg2-binary 
-pero antes tiene que abrir requirements.txt comentar #psycopg2==2.9.9
-
+version python 3.12
 ## Comandos Requeridos
 
 1. Instala las dependencias del proyecto utilizando `pip` y el archivo `requirements.txt`:
 
    ```bash
    pip install -r requirements.txt
+
+si tienes problemas con driver postgres ejecuta este comando: pip install psycopg2-binary
+pero antes tiene que abrir requirements.txt comentar #psycopg2==2.9.9
 
 Licencia
 Este proyecto se distribuye bajo la licencia MIT.
